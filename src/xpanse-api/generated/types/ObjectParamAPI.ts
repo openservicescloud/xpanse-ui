@@ -2,7 +2,8 @@ import { ResponseContext, RequestContext, HttpFile } from '../http/http';
 import { Configuration} from '../configuration'
 
 
-import { ObservableAdminApi } from "./ObservableAPI";
+
+import { ObservableAdminApi, ObservableServiceApi } from './ObservableAPI';
 import { AdminApiRequestFactory, AdminApiResponseProcessor} from "../apis/AdminApi";
 
 export interface AdminApiHealthRequest {
@@ -24,8 +25,6 @@ export class ObjectAdminApi {
 
 }
 
-import { ObservableServiceApi } from "./ObservableAPI";
-import { ServiceApiRequestFactory, ServiceApiResponseProcessor} from "../apis/ServiceApi";
 
 export interface ServiceApiDeployRequest {
     /**
@@ -118,6 +117,7 @@ import { ObservableServiceVendorApi } from "./ObservableAPI";
 import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor} from "../apis/ServiceVendorApi";
 import { SystemStatus } from '../models/SystemStatus';
 import { CreateRequest } from '../models/CreateRequest';
+import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
 import { DeployServiceEntity } from '../models/DeployServiceEntity';
 import { ServiceVo } from '../models/ServiceVo';
 import { Ocl } from '../models/Ocl';

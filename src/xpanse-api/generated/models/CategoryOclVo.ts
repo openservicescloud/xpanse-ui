@@ -10,8 +10,8 @@
  * Do not edit the class manually.
  */
 
-import { HttpFile } from '../http/http';
 import { VersionOclVo } from './VersionOclVo';
+import { HttpFile } from '../http/http';
 
 export class CategoryOclVo {
     /**

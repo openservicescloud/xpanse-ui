@@ -2,7 +2,7 @@ import { ResponseContext, RequestContext, HttpFile } from '../http/http';
 import { Configuration} from '../configuration'
 
 
-import { ObservableAdminApi } from './ObservableAPI';
+import { ObservableAdminApi, ObservableServiceVendorApi } from './ObservableAPI';
 
 import { AdminApiRequestFactory, AdminApiResponseProcessor} from "../apis/AdminApi";
 export class PromiseAdminApi {
@@ -31,6 +31,15 @@ export class PromiseAdminApi {
 import { ObservableServiceApi } from './ObservableAPI';
 
 import { ServiceApiRequestFactory, ServiceApiResponseProcessor} from "../apis/ServiceApi";
+import { SystemStatus } from '../models/SystemStatus';
+import { CreateRequest } from '../models/CreateRequest';
+import { DeployServiceEntity } from '../models/DeployServiceEntity';
+import { ServiceVo } from '../models/ServiceVo';
+import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
+import { OclDetailVo } from '../models/OclDetailVo';
+import { RegisterServiceEntity } from '../models/RegisterServiceEntity';
+import { CategoryOclVo } from '../models/CategoryOclVo';
+import { Ocl } from '../models/Ocl';
 export class PromiseServiceApi {
     private api: ObservableServiceApi
 
@@ -87,20 +96,6 @@ export class PromiseServiceApi {
 
 
 }
-
-
-
-import { ObservableServiceVendorApi } from './ObservableAPI';
-
-import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor} from "../apis/ServiceVendorApi";
-import { SystemStatus } from '../models/SystemStatus';
-import { CreateRequest } from '../models/CreateRequest';
-import { DeployServiceEntity } from '../models/DeployServiceEntity';
-import { ServiceVo } from '../models/ServiceVo';
-import { OclDetailVo } from '../models/OclDetailVo';
-import { RegisterServiceEntity } from '../models/RegisterServiceEntity';
-import { CategoryOclVo } from '../models/CategoryOclVo';
-import { Ocl } from '../models/Ocl';
 export class PromiseServiceVendorApi {
     private api: ObservableServiceVendorApi
 
