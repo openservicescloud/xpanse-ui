@@ -39,11 +39,6 @@ export const SelectFlavor = ({ flavorMapper, versionValue }: { flavorMapper: Map
                     ]}
                 />
             </Space>
-            <div>
-                <Button type='primary' style={{ backgroundColor: '#1677ff' }} onClick={onClicked}>
-                    Next
-                </Button>
-            </div>
         </div>
     );
 };

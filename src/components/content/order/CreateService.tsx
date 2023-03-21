@@ -27,6 +27,7 @@ function CreateService(): JSX.Element {
     const [serviceName, setServiceName] = useState<string>('');
     const [categoryName, setCategoryName] = useState<string>('');
     const [oclList, setOclList] = useState<Ocl[]>([]);
+    const [service, setService] = useState<RegisterServiceEntity| undefined>(undefined);
     const location = useLocation();
 
     const handleChangeVersion = (value: string) => {
@@ -40,18 +41,18 @@ function CreateService(): JSX.Element {
         navigate(-1);
     };
 
-    const gotoOrderSubmit = function(service: RegisterServiceEntity) {
+    const gotoOrderSubmit = function() {
         let props : OrderSubmitProps = {
             category: categoryName as CreateRequestCategoryEnum,
             name: serviceName,
             version: versionValue,
             region: "todo",
-            csp:  service.csp as CreateRequestCspEnum,
+            csp:  service === undefined ? 'huawei' : service.csp as CreateRequestCspEnum,
             flavor: "todo",
             params: new Array<DeployParam>()
         }
 
-        if (service.ocl?.deployment.context !== undefined) {
+        if (service !== undefined && service.ocl?.deployment.context !== undefined) {
             for (let param of service.ocl?.deployment.context) {
                 props.params.push({
                     name: param.name,
@@ -107,6 +108,7 @@ function CreateService(): JSX.Element {
     }, [location]);
 
     return (
+        <>
         <div className={'services-content'}>
             <div className={'back-button-class'}>
                 <Button type='text' onClick={goBackPage}>
@@ -126,6 +128,18 @@ function CreateService(): JSX.Element {
             <Divider />
             <SelectCloudProvider versionValue={versionValue} oclList={oclList} />
         </div>
+        <div>
+            <div className={'Line'} />
+            <div className={'order-param-item-row'}>
+                <div className={'order-param-item-left'} />
+                <div className={'order-param-submit'}>
+                    <Button type='primary' onClick={gotoOrderSubmit}>
+                        Next
+                    </Button>
+                </div>
+            </div>
+        </div>
+    </>
     );
 }
 
