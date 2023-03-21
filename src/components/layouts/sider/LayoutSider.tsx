@@ -11,9 +11,7 @@ import registerPanelMenu from '../../content/register/registerPanelMenu';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { catalogMenu } from '../../content/catalog/services/catalogMenu';
-import { OrderMenu } from '../../content/order/OrderMenu';
 import { servicesMenu } from '../../content/order/servicesMenu';
-import { getCategoryList } from '../../../xpanse-api/service-vendor/api';
 
 function LayoutSider(): JSX.Element {
     const [collapsed, setCollapsed] = useState(false);
@@ -29,11 +27,11 @@ function LayoutSider(): JSX.Element {
             serviceVendorApi
                 .listCategories()
                 .then((rsp) => {
-                    setItems([catalogMenu(rsp), registerPanelMenu(), OrderMenu()]);
+                    setItems([catalogMenu(rsp), registerPanelMenu()]);
                 })
                 .catch((error) => {
                     console.log(error.message);
-                    setItems([catalogMenu([]), registerPanelMenu(), OrderMenu()]);
+                    setItems([catalogMenu([]), registerPanelMenu()]);
                 });
         }else{
             serviceVendorApi

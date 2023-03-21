@@ -9,8 +9,16 @@ import { Button, Divider, Select } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import { SelectCloudProvider } from './SelectCloudProvider';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
-import { Ocl, VersionOclVo } from '../../../xpanse-api/generated';
+import {
+    CreateRequestCategoryEnum,
+    CreateRequestCspEnum,
+    Ocl,
+    RegisterServiceEntity,
+    VersionOclVo
+} from '../../../xpanse-api/generated';
 import { SelectFlavor } from './SelectFlavor';
+import { OrderSubmitProps } from './OrderSubmit';
+import { DeployParam } from './VariableElement/OrderCommon';
 
 function CreateService(): JSX.Element {
     const navigate = useNavigate();
@@ -30,6 +38,39 @@ function CreateService(): JSX.Element {
 
     const goBackPage = function (cfg: any) {
         navigate(-1);
+    };
+
+    const gotoOrderSubmit = function(service: RegisterServiceEntity) {
+        let props : OrderSubmitProps = {
+            category: categoryName as CreateRequestCategoryEnum,
+            name: serviceName,
+            version: versionValue,
+            region: "todo",
+            csp:  service.csp as CreateRequestCspEnum,
+            flavor: "todo",
+            params: new Array<DeployParam>()
+        }
+
+        if (service.ocl?.deployment.context !== undefined) {
+            for (let param of service.ocl?.deployment.context) {
+                props.params.push({
+                    name: param.name,
+                    kind: param.kind,
+                    type: param.type,
+                    example: param.example === undefined? "": param.example,
+                    description: param.description,
+                    value: param.value === undefined? "": param.value,
+                    mandatory: param.mandatory,
+                    validator: param.validator === undefined? "":param.validator
+                })
+            }
+        }
+
+        navigate('/order', {
+            state: {
+                props: props
+            }
+        })
     };
 
     useEffect(() => {

@@ -16,18 +16,18 @@ export type ParamOnChangeHandler =
     | CheckBoxOnChangeHandler
     | SwitchOnChangeHandler;
 
-export interface OrderParam {
+export interface DeployParam {
     name: string;
     kind: string;
     type: string;
     example: string;
     description: string;
-    value: string | number | boolean;
+    value: string;
     mandatory: boolean;
     validator: string;
 }
 
-export interface OrderParamItemProps {
-    item: OrderParam;
+export interface DeployParamItem {
+    item: DeployParam;
     [key: string]: any;
 }
