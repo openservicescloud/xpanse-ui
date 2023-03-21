@@ -32,9 +32,6 @@ function CreateService(): JSX.Element {
     const location = useLocation();
 
     const handleChangeVersion = (value: string) => {
-        console.log('versionValue: ', versionValue);
-        console.log('serviceName: ', serviceName);
-        console.log('categoryName: ', categoryName);
         setVersionValue(value);
     };
 
