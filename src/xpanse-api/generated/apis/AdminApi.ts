@@ -8,10 +8,12 @@ import {canConsumeForm, isCodeInRange} from '../util';
 import {SecurityAuthentication} from '../auth/auth';
 import { SystemStatus } from '../models/SystemStatus';
 
+
 /**
  * no description
  */
 export class AdminApiRequestFactory extends BaseAPIRequestFactory {
+
     /**
      */
     public async health(_options?: Configuration): Promise<RequestContext> {
@@ -33,9 +35,11 @@ export class AdminApiRequestFactory extends BaseAPIRequestFactory {
 
         return requestContext;
     }
+
 }
 
 export class AdminApiResponseProcessor {
+
     /**
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects

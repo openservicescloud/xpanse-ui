@@ -111,5 +111,5 @@ export class DeployVariable {
 
 
 export type DeployVariableKindEnum = "fix_env" | "fix_variable" | "env" | "variable" ;
-export type DeployVariableTypeEnum = "string" | "number" ;
+export type DeployVariableTypeEnum = "string" | "number" | "boolean" ;
 
