@@ -5,13 +5,13 @@
 
 import { Form, Input, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { OrderParam, TextInputEventHandler } from './OrderCommon';
+import { DeployParam, TextInputEventHandler } from './OrderCommon';
 
 export function OrderTextInput({
     item,
     onChangeHandler,
 }: {
-    item: OrderParam;
+    item: DeployParam;
     onChangeHandler: TextInputEventHandler;
 }): JSX.Element {
     return (

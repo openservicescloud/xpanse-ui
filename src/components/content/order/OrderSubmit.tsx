@@ -5,10 +5,10 @@
 
 import Navigate from './Navigate';
 import '../../../styles/order.css';
-import { To } from 'react-router-dom';
+import { To, useLocation } from 'react-router-dom';
 import { HomeOutlined } from '@ant-design/icons';
 import { ChangeEvent, useState } from 'react';
-import { OrderParam, OrderParamItemProps, ParamOnChangeHandler } from './VariableElement/OrderCommon';
+import { DeployParam, DeployParamItem, ParamOnChangeHandler } from './VariableElement/OrderCommon';
 import { OrderTextInput } from './VariableElement/OrderTextInput';
 import { OrderNumberInput } from './VariableElement/OrderNumberInput';
 import { OrderSwitch } from './VariableElement/OrderSwitch';
@@ -21,7 +21,7 @@ const deployTimeout: number = 3600000;
 // 5 seconds.
 const waitServicePeriod: number = 5000;
 
-function OrderItem(props: OrderParamItemProps) {
+function OrderItem(props: DeployParamItem) {
     if (props.item.type === 'string') {
         return <OrderTextInput item={props.item} onChangeHandler={props.onChangeHandler} />;
     }
@@ -35,7 +35,7 @@ function OrderItem(props: OrderParamItemProps) {
     return <></>;
 }
 
-export interface OrderExtendProps {
+export interface OrderSubmitProps {
     // The category of the service
     category: CreateRequestCategoryEnum;
     // The name of the service
@@ -49,12 +49,12 @@ export interface OrderExtendProps {
     // The flavor of the Service.
     flavor: string;
     // The deployment context
-    params: OrderParam[];
+    params: DeployParam[];
 }
 
-function OrderSubmit(props: OrderExtendProps): JSX.Element {
+function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     const [tip, setTip] = useState<JSX.Element | undefined>(undefined);
-    const [parameters, setParameters] = useState<OrderParam[]>(props.params);
+    const [parameters, setParameters] = useState<DeployParam[]>(props.params);
     const [deploying, setDeploying] = useState<boolean>(false);
 
     function Tip(type: 'error' | 'success', msg: string) {
@@ -65,7 +65,7 @@ function OrderSubmit(props: OrderExtendProps): JSX.Element {
         setTip(undefined);
     }
 
-    function GetOnChangeHandler(parameter: OrderParam): ParamOnChangeHandler {
+    function GetOnChangeHandler(parameter: DeployParam): ParamOnChangeHandler {
         console.log(parameters);
         if (parameter.type === 'string') {
             return (event: ChangeEvent<HTMLInputElement>) => {
@@ -99,7 +99,7 @@ function OrderSubmit(props: OrderExtendProps): JSX.Element {
                 setParameters(
                     parameters.map((item) => {
                         if (item.name === parameter.name) {
-                            return { ...item, value: checked };
+                            return { ...item, value: checked ? 'true': 'false' };
                         }
                         return item;
                     })
@@ -154,7 +154,7 @@ function OrderSubmit(props: OrderExtendProps): JSX.Element {
         setDeploying(true);
 
         serviceApi
-            .start(createRequest)
+            .deploy(createRequest)
             .then((response) => {
                 console.log('success ', response);
                 Tip('success', response);
@@ -207,6 +207,12 @@ function OrderSubmit(props: OrderExtendProps): JSX.Element {
             </Form>
         </>
     );
+}
+
+export function OrderSubmitPage() : JSX.Element {
+    const { state } = useLocation();
+    const { props } = state;
+    return OrderSubmit(props);
 }
 
 export function DefaultOrderExtendParamsBak(): JSX.Element {
