@@ -36,11 +36,10 @@ function LayoutSider(): JSX.Element {
                     setItems([catalogMenu([]), registerPanelMenu(), OrderMenu()]);
                 });
         }else{
-            // serviceVendorApi
-            // .listCategories()
-            getCategoryList()
+            serviceVendorApi
+            .listCategories()
             .then((rsp) => {
-                setItems([servicesMenu(rsp.data.data)]);
+                setItems([servicesMenu(rsp)]);
             })
             .catch((error) => {
                 console.log(error.message);

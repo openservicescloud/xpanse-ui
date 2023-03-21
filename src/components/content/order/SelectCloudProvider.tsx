@@ -7,48 +7,56 @@ import { useEffect, useState } from 'react';
 import { Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import { SelectArea } from './SelectArea';
+import { Area, Flavor, Ocl } from '../../../xpanse-api/generated';
+import { SelectFlavor } from './SelectFlavor';
 
 type TabPosition = 'left' | 'right' | 'top' | 'bottom';
 export const SelectCloudProvider = ({
     versionValue,
-    versionList,
+    oclList,
 }: {
     versionValue: string;
-    versionList: ServiceVendor.Version[];
+    oclList: Ocl[];
 }): JSX.Element => {
     const [tabPosition, setTabPosition] = useState<TabPosition>('bottom');
     const [cloudProviderValue, setCloudProviderValue] = useState<string>('');
-    const areaMapper: Map<string, ServiceVendor.Area[]> = new Map<string, ServiceVendor.Area[]>();
+    const [cloudServiceProviderList, setCloudServiceProviderList] = useState<Tab[]>([]);
+    const flavorMapper: Map<string, Flavor[]> = new Map<string, Flavor[]>();
+    const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
+
     const onChange = (key: string) => {
         setCloudProviderValue(key);
     };
 
-    const items: Tab[] = versionList
-        .filter((v) => (v as ServiceVendor.Version).version === versionValue)
+    useEffect(()=>{
+        const items: Tab[] = oclList
+        .filter((v) => (v as Ocl).serviceVersion === versionValue)
         .flatMap((v) => {
-            if (!v || !v.cloudProviderList) {
+            if (!v || !v.cloudServiceProvider) {
                 return { key: '', label: '' };
             }
-            return v.cloudProviderList.map((cloudProvider: ServiceVendor.CloudProvider) => {
-                if (!cloudProvider.name) {
-                    return { key: '', label: '' };
-                }
-                areaMapper.set(cloudProvider.name, cloudProvider.areaList || []);
-                const name = cloudProvider.name!.toString();
-                return {
-                    label: name,
-                    key: name,
-                    children: ['CloudProvider： '.concat(name)],
-                };
-            });
+            if (!v.cloudServiceProvider.name) {
+                return { key: '', label: '' };
+            }
+            areaMapper.set(v.cloudServiceProvider.name || '', v.cloudServiceProvider.areas || []);
+            flavorMapper.set(v.serviceVersion, v.flavors);
+            setCloudProviderValue(v.cloudServiceProvider.name);
+            const name = v.cloudServiceProvider.name;
+            return {
+                label: name,
+                key: name,
+                children: ['CloudProvider： '.concat(name)],
+            };
         });
+        setCloudServiceProviderList(items);
+    },[oclList,versionValue]);
 
-    console.log('areaMapper: ', areaMapper);
 
     return (
         <div>
-            <Tabs tabPosition={tabPosition} items={items} onChange={onChange} />
+            <Tabs tabPosition={tabPosition} items={cloudServiceProviderList} onChange={onChange} />
             <SelectArea cloudProviderValue={cloudProviderValue} areaMapper={areaMapper} />
+            <SelectFlavor versionValue ={versionValue} flavorMapper={flavorMapper} />
         </div>
     );
 };

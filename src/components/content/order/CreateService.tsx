@@ -8,17 +8,23 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Divider, Select } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import { SelectCloudProvider } from './SelectCloudProvider';
-import { getVersionList } from '../../../xpanse-api/service-vendor/api';
+import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
+import { Ocl, VersionOclVo } from '../../../xpanse-api/generated';
+import { SelectFlavor } from './SelectFlavor';
 
 function CreateService(): JSX.Element {
     const navigate = useNavigate();
     const [versionOptions, setVersionOptions] = useState<{ value: string; label: string }[]>([]);
     const [versionValue, setVersionValue] = useState<string>('');
     const [serviceName, setServiceName] = useState<string>('');
-    const [versionList, setVersionList] = useState<ServiceVendor.Version[]>([]);
+    const [categoryName, setCategoryName] = useState<string>('');
+    const [oclList, setOclList] = useState<Ocl[]>([]);
     const location = useLocation();
 
     const handleChangeVersion = (value: string) => {
+        console.log('versionValue: ',versionValue);
+        console.log('serviceName: ',serviceName);
+        console.log('categoryName: ',categoryName);
         setVersionValue(value);
     };
 
@@ -27,21 +33,34 @@ function CreateService(): JSX.Element {
     };
 
     useEffect(() => {
-        const serviceName = location.search.split('?')[1].split('&')[0].split('=')[1];
-        const subServiceName = location.search.split('?')[1].split('&')[1].split('=')[1];
+        const categoryName = location.search.split('?')[1].split('&')[0].split('=')[1];
+        const serviceName = location.search.split('?')[1].split('&')[1].split('=')[1];
+        if (!categoryName || !serviceName) {
+            return;
+        }
+        setCategoryName(categoryName);
         setServiceName(serviceName);
-        // TODO Two parameters need to be passed in
-        // getVersionList(serviceName, subServiceName).then((rsp)=>{
-        getVersionList().then((rsp) => {
-            setVersionList(rsp.data.data);
-            let versions: { value: string; label: string }[] = [];
-            rsp.data.data.forEach((item) => {
-                let versionItem = { value: item.version, label: item.version };
-                versions.push(versionItem);
-            });
-            setVersionOptions(versions);
-            if (versions.length > 0) {
+        serviceVendorApi.listRegisteredServices(categoryName, '', serviceName, '').then((rsp) => {
+            if (rsp.length > 0) {
+                console.log('rsp from CreateService: ', rsp);
+                let versions: { value: string; label: string }[] = [];
+                let ocl : Ocl[] = [];
+                let versionInfo = new Set();
+                rsp.forEach((item) => {
+                    versionInfo.add(item.ocl?.serviceVersion)
+                    let versionItem = { value: item.ocl?.serviceVersion || '', label: item.ocl?.serviceVersion || '' };
+                    versions.push(versionItem);
+                    let oclItem : Ocl | undefined= item.ocl;
+                    if (oclItem instanceof Ocl) {
+                        ocl.push(oclItem);
+                    }
+                });
+
+                setVersionOptions(versions);
                 setVersionValue(versions[0].value);
+                setOclList(ocl);
+            } else {
+                return;
             }
         });
     }, [location]);
@@ -64,7 +83,7 @@ function CreateService(): JSX.Element {
                 />
             </div>
             <Divider />
-            <SelectCloudProvider versionValue={versionValue} versionList={versionList} />
+            <SelectCloudProvider versionValue={versionValue} oclList={oclList} />
         </div>
     );
 }

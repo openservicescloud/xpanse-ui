@@ -3,11 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Select, Space, Tabs } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { Flavor } from '../../../xpanse-api/generated';
 
-export const SelectFlavor = ({ regionValue }: { regionValue: string }): JSX.Element => {
+export const SelectFlavor = ({ flavorMapper, versionValue }: { flavorMapper: Map<string, Flavor[]>, versionValue:string }): JSX.Element => {
     const navigate = useNavigate();
     const [flavorValue, setFlavorValue] = useState<string>('');
     const handleChangeFlavor = (value: string) => {
@@ -17,6 +18,10 @@ export const SelectFlavor = ({ regionValue }: { regionValue: string }): JSX.Elem
     const onClicked = function (cfg: any) {
         navigate('/home');
     };
+
+    useEffect(() => {
+        flavorMapper.get(versionValue)
+    }, [flavorMapper]);
 
     return (
         <div>

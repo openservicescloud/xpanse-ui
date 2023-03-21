@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { Tabs } from 'antd';
 import { SelectRegion } from './SelectRegion';
 import { Tab } from 'rc-tabs/lib/interface';
+import { Area } from '../../../xpanse-api/generated';
 
 type TabPosition = 'left' | 'right' | 'top' | 'bottom';
 export const SelectArea = ({
@@ -14,21 +15,21 @@ export const SelectArea = ({
     areaMapper,
 }: {
     cloudProviderValue: string;
-    areaMapper: Map<string, ServiceVendor.Area[]>;
+    areaMapper: Map<string, Area[]>;
 }): JSX.Element => {
     const [tabPosition, setTabPosition] = useState<TabPosition>('bottom');
     const [areaValue, setAreaValue] = useState<string>('');
-    const [areaList, setAreaList] = useState<ServiceVendor.Area[]>([]);
+    const [areaList, setAreaList] = useState<Area[]>([]);
     const [items, setItems] = useState<Tab[]>([]);
 
     const onChange = (key: string) => {
         setAreaValue(key);
     };
     useEffect(() => {
-        const areaList: ServiceVendor.Area[] = areaMapper.get(cloudProviderValue) || [];
+        const areaList: Area[] = areaMapper.get(cloudProviderValue) || [];
         setAreaList(areaList);
         setItems(
-            areaList.map((area: ServiceVendor.Area) => {
+            areaList.map((area: Area) => {
                 if (!area.name) {
                     return { key: '', label: '' };
                 }
@@ -41,6 +42,8 @@ export const SelectArea = ({
             })
         );
     }, [cloudProviderValue, areaMapper]);
+
+
 
     return (
         <div>
