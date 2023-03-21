@@ -61,15 +61,8 @@ function Services(): JSX.Element {
                     return (
                         <div
                             key={index}
-                            className={
-                                isSelected === index
-                                    ? 'service-type-option-detail-selected'
-                                    : 'service-type-option-detail'
-                            }
+                            className={'service-type-option-detail'}
                             onClick={(e) => onClicked(item.name)}
-                            onMouseOver={() => {
-                                setIsSelected(index);
-                            }}
                         >
                             <div className='service-type-option-image'>
                                 <img className='service-type-option-service-icon'/>
