@@ -49,11 +49,6 @@ export const SelectFlavor = ({
                     options={flavorOptions}
                 />
             </Space>
-            <div>
-                <Button type='primary' style={{ backgroundColor: '#1677ff' }} onClick={onClicked}>
-                    Next
-                </Button>
-            </div>
         </div>
     );
 };

@@ -4,12 +4,22 @@
  */
 
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { To, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Divider, Select } from 'antd';
-import { LeftOutlined } from '@ant-design/icons';
+import { HomeOutlined, LeftOutlined } from '@ant-design/icons';
 import { SelectCloudProvider } from './SelectCloudProvider';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
-import { Ocl, VersionOclVo } from '../../../xpanse-api/generated';
+import {
+    CreateRequestCategoryEnum,
+    CreateRequestCspEnum,
+    Ocl,
+    RegisterServiceEntity,
+    VersionOclVo,
+} from '../../../xpanse-api/generated';
+import { SelectFlavor } from './SelectFlavor';
+import { OrderSubmitProps } from './OrderSubmit';
+import { DeployParam } from './VariableElement/OrderCommon';
+import Navigate from './Navigate';
 
 function CreateService(): JSX.Element {
     const navigate = useNavigate();
@@ -18,6 +28,7 @@ function CreateService(): JSX.Element {
     const [serviceName, setServiceName] = useState<string>('');
     const [categoryName, setCategoryName] = useState<string>('');
     const [oclList, setOclList] = useState<Ocl[]>([]);
+    const [service, setService] = useState<RegisterServiceEntity | undefined>(undefined);
     const location = useLocation();
 
     const handleChangeVersion = (value: string) => {
@@ -26,6 +37,39 @@ function CreateService(): JSX.Element {
 
     const goBackPage = function (cfg: any) {
         navigate(-1);
+    };
+
+    const gotoOrderSubmit = function () {
+        let props: OrderSubmitProps = {
+            category: categoryName as CreateRequestCategoryEnum,
+            name: serviceName,
+            version: versionValue,
+            region: 'todo',
+            csp: service === undefined ? 'huawei' : (service.csp as CreateRequestCspEnum),
+            flavor: 'todo',
+            params: new Array<DeployParam>(),
+        };
+
+        if (service !== undefined && service.ocl?.deployment.context !== undefined) {
+            for (let param of service.ocl?.deployment.context) {
+                props.params.push({
+                    name: param.name,
+                    kind: param.kind,
+                    type: param.type,
+                    example: param.example === undefined ? '' : param.example,
+                    description: param.description,
+                    value: param.value === undefined ? '' : param.value,
+                    mandatory: param.mandatory,
+                    validator: param.validator === undefined ? '' : param.validator,
+                });
+            }
+        }
+
+        navigate('/order', {
+            state: {
+                props: props,
+            },
+        });
     };
 
     useEffect(() => {
@@ -62,25 +106,36 @@ function CreateService(): JSX.Element {
     }, [location]);
 
     return (
-        <div className={'services-content'}>
-            <div className={'back-button-class'}>
-                <Button type='text' onClick={goBackPage}>
-                    <LeftOutlined />
-                    Back
-                </Button>
+        <>
+            <div>
+                <Navigate text={'<< Back'} to={-1 as To} />
+                <div className={'Line'} />
             </div>
-            <div className={'content-title'}>
-                Service: {serviceName}&nbsp;&nbsp;&nbsp;&nbsp; Version:&nbsp;
-                <Select
-                    value={versionValue}
-                    style={{ width: 120 }}
-                    onChange={handleChangeVersion}
-                    options={versionOptions}
-                />
+            <div className={'services-content'}>
+                <div className={'content-title'}>
+                    Service: {serviceName}&nbsp;&nbsp;&nbsp;&nbsp; Version:&nbsp;
+                    <Select
+                        value={versionValue}
+                        style={{ width: 120 }}
+                        onChange={handleChangeVersion}
+                        options={versionOptions}
+                    />
+                </div>
+                <Divider />
+                <SelectCloudProvider versionValue={versionValue} oclList={oclList} />
             </div>
-            <Divider />
-            <SelectCloudProvider versionValue={versionValue} oclList={oclList} />
-        </div>
+            <div>
+                <div className={'Line'} />
+                <div className={'order-param-item-row'}>
+                    <div className={'order-param-item-left'} />
+                    <div className={'order-param-submit'}>
+                        <Button type='primary' onClick={gotoOrderSubmit}>
+                            Next
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </>
     );
 }
 

@@ -4,13 +4,13 @@
  */
 
 import { Checkbox, Form } from 'antd';
-import { CheckBoxOnChangeHandler, OrderParam } from './OrderCommon';
+import { CheckBoxOnChangeHandler, DeployParam } from './OrderCommon';
 
 export function OrderCheckBox({
     item,
     onChangeHandler,
 }: {
-    item: OrderParam;
+    item: DeployParam;
     onChangeHandler: CheckBoxOnChangeHandler;
 }): JSX.Element {
     return (
