@@ -17,6 +17,7 @@
 }
 
 .service-type-option-detail:hover {
+    cursor: pointer;
     display: flex;
     flex-flow: nowrap row;
     padding: 20px;
