@@ -122,7 +122,11 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             .then((response) => {
                 // success, exit from deploying.
                 setDeploying(false);
-                console.log('waitingServiceReady success', response);
+                if (response.serviceState === 'DEPLOY_SUCCESS') {
+                    Tip('success', 'Deploy success.');
+                } else {
+                    Tip('error', 'Deploy failed.');
+                }
             })
             .catch((error) => {
                 console.log('waitingServiceReady error', error);
