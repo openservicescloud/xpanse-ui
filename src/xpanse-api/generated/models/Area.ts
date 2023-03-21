@@ -11,17 +11,19 @@
  */
 
 import { HttpFile } from '../http/http';
-import { VersionOclVo } from './VersionOclVo';
 
-export class CategoryOclVo {
+/**
+* The area of the regions
+*/
+export class Area {
     /**
-    * Name of the registered service.
+    * The name of the area
     */
     'name': string;
     /**
-    * List of the registered service group by service version.
+    * The regions of the area
     */
-    'versions': Array<VersionOclVo>;
+    'regions': Array<string>;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -33,14 +35,14 @@ export class CategoryOclVo {
             "format": ""
         },
         {
-            "name": "versions",
-            "baseName": "versions",
-            "type": "Array<VersionOclVo>",
+            "name": "regions",
+            "baseName": "regions",
+            "type": "Array<string>",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return CategoryOclVo.attributeTypeMap;
+        return Area.attributeTypeMap;
     }
 
     public constructor() {

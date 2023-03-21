@@ -1,8 +1,3 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- * SPDX-FileCopyrightText: Huawei Inc.
- */
-
 /**
  * Returns if a specific http code is in a given code range
  * where the code range is defined as a combination of digits
@@ -13,7 +8,7 @@
  */
 export function isCodeInRange(codeRange: string, code: number): boolean {
     // This is how the default value is encoded in OAG
-    if (codeRange === '0') {
+    if (codeRange === "0") {
         return true;
     }
     if (codeRange == code.toString()) {
@@ -24,7 +19,7 @@ export function isCodeInRange(codeRange: string, code: number): boolean {
             return false;
         }
         for (let i = 0; i < codeString.length; i++) {
-            if (codeRange.charAt(i) != 'X' && codeRange.charAt(i) != codeString.charAt(i)) {
+            if (codeRange.charAt(i) != "X" && codeRange.charAt(i) != codeString.charAt(i)) {
                 return false;
             }
         }
@@ -33,10 +28,10 @@ export function isCodeInRange(codeRange: string, code: number): boolean {
 }
 
 /**
- * Returns if it can consume form
- *
- * @param consumes array
- */
+* Returns if it can consume form
+*
+* @param consumes array
+*/
 export function canConsumeForm(contentTypes: string[]): boolean {
-    return contentTypes.indexOf('multipart/form-data') !== -1;
+    return contentTypes.indexOf('multipart/form-data') !== -1
 }
