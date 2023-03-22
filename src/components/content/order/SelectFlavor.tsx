@@ -19,23 +19,23 @@ export const SelectFlavor = ({
     const [flavorOptions, setFlavorOptions] = useState<{ value: string; label: string }[]>([]);
     const [flavorValue, setFlavorValue] = useState<string>('');
     const handleChangeFlavor = (value: string) => {
-        console.log(`selected ${value}`);
         setFlavorValue(value);
-    };
-    const onClicked = function (cfg: any) {
-        navigate('/home');
     };
 
     useEffect(() => {
         const flavorList: Flavor[] = flavorMapper.get(versionValue) || [];
         let flavors: { value: string; label: string }[] = [];
-        flavorList.map((flavor) => {
-            let flavorItem = { value: flavor.name, label: flavor.name };
+        if(flavorList.length > 0){
+            flavorList.map((flavor) => {
+                let flavorItem = { value: flavor.name, label: flavor.name };
 
-            flavors.push(flavorItem);
-        });
-        setFlavorOptions(flavors);
-        // setFlavorValue(flavors[0].value);
+                flavors.push(flavorItem);
+            });
+            setFlavorOptions(flavors);
+            setFlavorValue(flavors[0].value);
+        }else{
+            return;
+        }
     }, [versionValue, flavorMapper]);
 
     return (

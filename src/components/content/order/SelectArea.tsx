@@ -28,25 +28,26 @@ export const SelectArea = ({
     useEffect(() => {
         const areaList: Area[] = areaMapper.get(cloudProviderValue) || [];
         setAreaList(areaList);
-        setItems(
-            areaList.map((area: Area) => {
-                if (!area.name) {
-                    return { key: '', label: '' };
-                }
-                const name = area.name;
-                return {
-                    label: name,
-                    key: name,
-                    children: ['Area： '.concat(name)],
-                };
-            })
-        );
+        const areaItems: Tab[] = areaList.map((area: Area) => {
+            if (!area.name) {
+                return { key: '', label: '' };
+            }
+            const name = area.name;
+            return {
+                label: name,
+                key: name,
+                children: ['Area： '.concat(name)],
+            };
+        });
+
+        setItems(areaItems);
+        // setDefaultActiveKey(areaItems[0].key)
     }, [cloudProviderValue, areaMapper]);
 
     return (
         <>
             <div className={'cloud-provider-tab-class content-title'}>
-                <Tabs tabPosition={tabPosition} items={items} onChange={onChange} />
+                <Tabs defaultActiveKey={'1'} tabPosition={tabPosition} items={items} onChange={onChange} />
             </div>
             <SelectRegion areaValue={areaValue} areaList={areaList} />
         </>
