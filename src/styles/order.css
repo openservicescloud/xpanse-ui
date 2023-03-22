@@ -12,22 +12,6 @@
     text-shadow: 0 0 1px red;
 }
 
-.order-service-title {
-    display: inline-block;
-    border: 1px solid transparent;
-    font-weight: bold;
-    color: black;
-    padding: 10px;
-}
-
-.order-service-title-version {
-    display: inline-block;
-    border: 1px solid transparent;
-    font-weight: bold;
-    color: #F97025;
-    padding: 10px;
-}
-
 .Line {
     height: 1px;
     border: 0 solid transparent;
