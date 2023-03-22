@@ -28,20 +28,24 @@ export const SelectArea = ({
     useEffect(() => {
         const areaList: Area[] = areaMapper.get(cloudProviderValue) || [];
         setAreaList(areaList);
-        const areaItems: Tab[] = areaList.map((area: Area) => {
-            if (!area.name) {
-                return { key: '', label: '' };
-            }
-            const name = area.name;
-            return {
-                label: name,
-                key: name,
-                children: ['Area： '.concat(name)],
-            };
-        });
+        if (areaList.length > 0) {
+            const areaItems: Tab[] = areaList.map((area: Area) => {
+                if (!area.name) {
+                    return { key: '', label: '' };
+                }
+                const name = area.name;
+                return {
+                    label: name,
+                    key: name,
+                    children: ['Area： '.concat(name)],
+                };
+            });
 
-        setItems(areaItems);
-        // setDefaultActiveKey(areaItems[0].key)
+            setItems(areaItems);
+            setAreaValue(areaList[0].name);
+        } else {
+            return;
+        }
     }, [cloudProviderValue, areaMapper]);
 
     return (
