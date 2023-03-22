@@ -39,10 +39,11 @@ export const SelectFlavor = ({
     }, [versionValue, flavorMapper]);
 
     return (
-        <div>
+        <div className={'region-flavor-content'}>
             Flavor:&nbsp;
             <Space wrap>
                 <Select
+                    className={'select-box-class'}
                     value={flavorValue}
                     style={{ width: 120 }}
                     onChange={handleChangeFlavor}
