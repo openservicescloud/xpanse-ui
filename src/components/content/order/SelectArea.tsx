@@ -17,7 +17,7 @@ export const SelectArea = ({
     cloudProviderValue: string;
     areaMapper: Map<string, Area[]>;
 }): JSX.Element => {
-    const [tabPosition, setTabPosition] = useState<TabPosition>('bottom');
+    const [tabPosition, setTabPosition] = useState<TabPosition>('top');
     const [areaValue, setAreaValue] = useState<string>('');
     const [areaList, setAreaList] = useState<Area[]>([]);
     const [items, setItems] = useState<Tab[]>([]);
