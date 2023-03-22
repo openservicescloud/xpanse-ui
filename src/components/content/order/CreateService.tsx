@@ -9,7 +9,7 @@ import { Button, Divider, Select } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import { SelectCloudProvider } from './SelectCloudProvider';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
-import { Ocl, VersionOclVo } from '../../../xpanse-api/generated';
+import { Ocl, RegisterServiceEntity, VersionOclVo } from '../../../xpanse-api/generated';
 import { SelectFlavor } from './SelectFlavor';
 
 function CreateService(): JSX.Element {
@@ -32,6 +32,16 @@ function CreateService(): JSX.Element {
         navigate(-1);
     };
 
+    function group(list:any[], key:string): Map<string, any[]>{
+        let map:Map<string, any[]> = new Map<string, any[]>();
+        list.map(val=>{
+            if(!map.has(val[key])){
+                map.set(val[key],list.filter(data=>data[key]==val[key]));
+            }
+        });
+        return map;
+    }
+
     useEffect(() => {
         const categoryName = location.search.split('?')[1].split('&')[0].split('=')[1];
         const serviceName = location.search.split('?')[1].split('&')[1].split('=')[1];
@@ -42,23 +52,14 @@ function CreateService(): JSX.Element {
         setServiceName(serviceName);
         serviceVendorApi.listRegisteredServices(categoryName, '', serviceName, '').then((rsp) => {
             if (rsp.length > 0) {
-                console.log('rsp from CreateService: ', rsp);
                 let versions: { value: string; label: string }[] = [];
-                let ocl : Ocl[] = [];
-                let versionInfo = new Set();
-                rsp.forEach((item) => {
-                    versionInfo.add(item.ocl?.serviceVersion)
-                    let versionItem = { value: item.ocl?.serviceVersion || '', label: item.ocl?.serviceVersion || '' };
+                const result:Map<string, RegisterServiceEntity[]> = group(rsp,"version");
+                result.forEach((v,k)=>{
+                    let versionItem = { value: k || '', label: k || '' };
                     versions.push(versionItem);
-                    let oclItem : Ocl | undefined= item.ocl;
-                    if (oclItem instanceof Ocl) {
-                        ocl.push(oclItem);
-                    }
-                });
-
+                })
                 setVersionOptions(versions);
                 setVersionValue(versions[0].value);
-                setOclList(ocl);
             } else {
                 return;
             }
