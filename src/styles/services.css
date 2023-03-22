@@ -2,7 +2,7 @@
     padding: 24px;
 }
 
-.services-content-body{
+.services-content-body {
     display: flex;
     flex-wrap: wrap;
 }
@@ -16,7 +16,8 @@
     margin: 10px;
 }
 
-.service-type-option-detail-selected {
+.service-type-option-detail:hover {
+    cursor: pointer;
     display: flex;
     flex-flow: nowrap row;
     padding: 20px;
@@ -48,18 +49,34 @@
     flex-grow: 1;
     text-align: left;
 }
-.service-type-option{
+
+.service-type-option {
     color: #333;
     font-size: 14px;
     font-weight: 700;
 }
+
 .service-type-option-description {
     font-size: 12px;
     color: #5e6366;
     min-height: 35px;
-    width:  261px;
+    width: 261px;
     margin-top: 5px;
 }
-.back-button-class{
+
+.back-button-class {
     margin-top: 15px;
+}
+
+.cloud-provider-tab-class {
+    margin: 0 0 20px 0;
+}
+
+.select-box-class {
+    box-sizing: border-box;
+}
+
+.region-flavor-content{
+    font-size: 14px;
+    font-weight: bold;
 }

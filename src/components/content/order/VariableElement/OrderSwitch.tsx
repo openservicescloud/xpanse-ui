@@ -4,13 +4,13 @@
  */
 
 import { Form, Switch } from 'antd';
-import { OrderParam, SwitchOnChangeHandler } from './OrderCommon';
+import { DeployParam, SwitchOnChangeHandler } from './OrderCommon';
 
 export function OrderSwitch({
     item,
     onChangeHandler,
 }: {
-    item: OrderParam;
+    item: DeployParam;
     onChangeHandler: SwitchOnChangeHandler;
 }): JSX.Element {
     return (

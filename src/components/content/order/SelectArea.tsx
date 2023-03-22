@@ -43,13 +43,12 @@ export const SelectArea = ({
         );
     }, [cloudProviderValue, areaMapper]);
 
-
-
     return (
-        <div>
-            {/*<Tabs defaultActiveKey='1' items={items} onChange={onChange} />*/}
-            <Tabs tabPosition={tabPosition} items={items} onChange={onChange} />
+        <>
+            <div className={'cloud-provider-tab-class content-title'}>
+                <Tabs tabPosition={tabPosition} items={items} onChange={onChange} />
+            </div>
             <SelectRegion areaValue={areaValue} areaList={areaList} />
-        </div>
+        </>
     );
 };

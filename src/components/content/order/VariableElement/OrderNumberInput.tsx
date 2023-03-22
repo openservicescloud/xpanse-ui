@@ -3,14 +3,14 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { NumberInputEventHandler, OrderParam } from './OrderCommon';
+import { NumberInputEventHandler, DeployParam } from './OrderCommon';
 import { Form, InputNumber } from 'antd';
 
 export function OrderNumberInput({
     item,
     onChangeHandler,
 }: {
-    item: OrderParam;
+    item: DeployParam;
     onChangeHandler: NumberInputEventHandler;
 }): JSX.Element {
     return (
