@@ -73,6 +73,7 @@
     flex-wrap: nowrap;
     flex-grow: 1;
     text-align: left;
+    margin-bottom: 20px;
 }
 
 .service-type-option {

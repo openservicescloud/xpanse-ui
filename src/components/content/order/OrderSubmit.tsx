@@ -12,7 +12,7 @@ import { DeployParam, DeployParamItem, ParamOnChangeHandler } from './VariableEl
 import { OrderTextInput } from './VariableElement/OrderTextInput';
 import { OrderNumberInput } from './VariableElement/OrderNumberInput';
 import { OrderSwitch } from './VariableElement/OrderSwitch';
-import { Alert, Button, Form } from 'antd';
+import { Alert, Button, Form, Select } from 'antd';
 import { CreateRequest, CreateRequestCategoryEnum, CreateRequestCspEnum } from '../../../xpanse-api/generated';
 import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';
 
@@ -99,7 +99,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 setParameters(
                     parameters.map((item) => {
                         if (item.name === parameter.name) {
-                            return { ...item, value: checked ? 'true': 'false' };
+                            return { ...item, value: checked ? 'true' : 'false' };
                         }
                         return item;
                     })
@@ -115,7 +115,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         Tip(
             'success',
             (('Deploying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000)) as string) +
-                's]'
+            's]'
         );
         serviceApi
             .serviceDetail(uuid)
@@ -139,7 +139,8 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                     TipClear();
                 }
             })
-            .finally(() => {});
+            .finally(() => {
+            });
     }
 
     function OnSubmit() {
@@ -152,7 +153,9 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         createRequest.flavor = props.flavor;
         createRequest.property = {};
         for (let item of parameters) {
-            createRequest.property[item.name] = item.value as string;
+            if (item.kind === 'variable') {
+                createRequest.property[item.name] = item.value as string;
+            }
         }
         // Start deploying
         setDeploying(true);
@@ -171,7 +174,8 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 setDeploying(false);
                 // setUuid(undefined);
             })
-            .finally(() => {});
+            .finally(() => {
+            });
     }
 
     return (
@@ -179,12 +183,10 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             <div>
                 <Navigate text={'<< Back'} to={-1 as To} />
                 <div className={'Line'} />
-                <HomeOutlined />
-                <div className={'order-service-title'}>
-                    Service:{' '}
-                    <span className={'order-service-title-version'}>
-                        {props.name}@{props.version}
-                    </span>
+                <div className={'services-content'}>
+                    <div className={'content-title'}>
+                        Service: {props.name}@{props.version}
+                    </div>
                 </div>
             </div>
             <div>{tip}</div>
@@ -196,7 +198,8 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             >
                 <div className={deploying ? 'deploying order-param-item-row' : ''}>
                     {parameters.map((item) => (
-                        <OrderItem key={item.name} item={item} onChangeHandler={GetOnChangeHandler(item)} />
+                        item.kind === 'variable' ?
+                            <OrderItem key={item.name} item={item} onChangeHandler={GetOnChangeHandler(item)} /> : <></>
                     ))}
                 </div>
                 <div className={'Line'} />
@@ -213,7 +216,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     );
 }
 
-export function OrderSubmitPage() : JSX.Element {
+export function OrderSubmitPage(): JSX.Element {
     const { state } = useLocation();
     const { props } = state;
     return OrderSubmit(props);
@@ -242,7 +245,7 @@ export function DefaultOrderExtendParamsBak(): JSX.Element {
                 description: 'The uuid of the security group',
                 value: '',
                 mandatory: true,
-                validator: 'string',
+                validator: 'string'
             },
             {
                 name: 'gateway_id',
@@ -252,7 +255,7 @@ export function DefaultOrderExtendParamsBak(): JSX.Element {
                 description: 'The uuid of the VPC',
                 value: '',
                 mandatory: false,
-                validator: 'string',
+                validator: 'string'
             },
             {
                 name: 'vpd_id',
@@ -262,7 +265,7 @@ export function DefaultOrderExtendParamsBak(): JSX.Element {
                 description: 'The uuid of the VPC',
                 value: '',
                 mandatory: false,
-                validator: 'string',
+                validator: 'string'
             },
             {
                 name: 'gateway_id2',
@@ -272,7 +275,7 @@ export function DefaultOrderExtendParamsBak(): JSX.Element {
                 description: 'The uuid of the VPC',
                 value: '',
                 mandatory: true,
-                validator: 'string',
+                validator: 'string'
             },
             {
                 name: 'gateway_boolean',
@@ -282,9 +285,9 @@ export function DefaultOrderExtendParamsBak(): JSX.Element {
                 description: 'The uuid of the VPC',
                 value: '',
                 mandatory: true,
-                validator: 'string',
-            },
-        ],
+                validator: 'string'
+            }
+        ]
     });
 }
 
@@ -311,9 +314,9 @@ export function DefaultOrderExtendParams(): JSX.Element {
                 description: 'The uuid of the security group',
                 value: '',
                 mandatory: true,
-                validator: 'string',
-            },
-        ],
+                validator: 'string'
+            }
+        ]
     });
 }
 
