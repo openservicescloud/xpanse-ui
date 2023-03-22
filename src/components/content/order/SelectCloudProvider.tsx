@@ -9,6 +9,7 @@ import { Tab } from 'rc-tabs/lib/interface';
 import { SelectArea } from './SelectArea';
 import { Area, RegisterServiceEntity, CloudServiceProviderNameEnum, Flavor, Ocl } from '../../../xpanse-api/generated';
 import { SelectFlavor } from './SelectFlavor';
+import { SelectRegion } from './SelectRegion';
 
 interface CSP {
     name: string;
@@ -50,6 +51,7 @@ export const SelectCloudProvider = ({
     const [cloudServiceProviderList, setCloudServiceProviderList] = useState<Tab[]>([]);
     const [flavorMapper, setFlavorMapper] = useState<Map<string, Flavor[]>>(new Map<string, Flavor[]>());
     const [areaMapper, setAreaMapper] = useState<Map<string, Area[]>>(new Map<string, Area[]>());
+
     const [oclList, setOclList] = useState<Ocl[]>([]);
     const [csp, setCsp] = useState<CSP[]>([
         {
@@ -63,6 +65,7 @@ export const SelectCloudProvider = ({
     };
 
     useEffect(() => {
+        let oclList : Ocl[]= [];
         const flavorMapper: Map<string, Flavor[]> = new Map<string, Flavor[]>();
         const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
         versionMapper.forEach((v, k) => {
@@ -74,7 +77,7 @@ export const SelectCloudProvider = ({
                         ocls.push(oclItem);
                     }
                 });
-                setOclList(ocls);
+                oclList=ocls;
             }
         });
         const items: Tab[] = oclList
@@ -99,7 +102,7 @@ export const SelectCloudProvider = ({
         setCloudServiceProviderList(items);
         setAreaMapper(areaMapper);
         setFlavorMapper(flavorMapper);
-    }, [oclList, versionValue]);
+    }, [versionValue, versionMapper]);
 
     return (
         <>
