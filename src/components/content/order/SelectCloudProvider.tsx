@@ -4,7 +4,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import { Tabs } from 'antd';
+import { Divider, Select, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import { SelectArea } from './SelectArea';
 import { Area, Flavor, Ocl, RegisterServiceEntity } from '../../../xpanse-api/generated';
@@ -18,7 +18,7 @@ export const SelectCloudProvider = ({
     versionValue: string;
     versionMapper: Map<string, RegisterServiceEntity[]>;
 }): JSX.Element => {
-    const [tabPosition, setTabPosition] = useState<TabPosition>('bottom');
+    const [tabPosition, setTabPosition] = useState<TabPosition>('top');
     const [cloudProviderValue, setCloudProviderValue] = useState<string>('');
     const [cloudServiceProviderList, setCloudServiceProviderList] = useState<Tab[]>([]);
     const [flavorMapper, setFlavorMapper] = useState<Map<string, Flavor[]>>(new Map<string, Flavor[]>());
@@ -70,6 +70,9 @@ export const SelectCloudProvider = ({
 
     return (
         <>
+            <div className={'cloud-provider-tab-class'}>
+                    Cloud Service Provider
+            </div>
             <div className={'cloud-provider-tab-class content-title'}>
                 <Tabs type='card' tabPosition={tabPosition} items={cloudServiceProviderList} onChange={onChange} />
             </div>
