@@ -58,7 +58,7 @@ export const SelectCloudProvider = ({
     return (
         <>
             <div className={'cloud-provider-tab-class content-title'}>
-                <Tabs tabPosition={tabPosition} items={cloudServiceProviderList} onChange={onChange} />
+                <Tabs type="card" tabPosition={tabPosition} items={cloudServiceProviderList} onChange={onChange} />
             </div>
             <SelectArea cloudProviderValue={cloudProviderValue} areaMapper={areaMapper} />
             <SelectFlavor versionValue={versionValue} flavorMapper={flavorMapper} />
