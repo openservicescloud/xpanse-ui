@@ -39,17 +39,19 @@ export const SelectFlavor = ({
     }, [versionValue, flavorMapper]);
 
     return (
-        <div className={'region-flavor-content'}>
-            Flavor:&nbsp;
-            <Space wrap>
-                <Select
-                    className={'select-box-class'}
-                    value={flavorValue}
-                    style={{ width: 120 }}
-                    onChange={handleChangeFlavor}
-                    options={flavorOptions}
-                />
-            </Space>
-        </div>
+        <>
+            <div className={'cloud-provider-tab-class region-flavor-content'}>Flavor:</div>
+            <div className={'cloud-provider-tab-class region-flavor-content'}>
+                <Space wrap>
+                    <Select
+                        className={'select-box-class'}
+                        value={flavorValue}
+                        style={{ width: 450 }}
+                        onChange={handleChangeFlavor}
+                        options={flavorOptions}
+                    />
+                </Space>
+            </div>
+        </>
     );
 };

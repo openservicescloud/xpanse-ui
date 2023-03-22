@@ -39,17 +39,19 @@ export const SelectRegion = ({ areaValue, areaList }: { areaValue: string; areaL
     }, [areaValue, areaList]);
 
     return (
-        <div className={'cloud-provider-tab-class region-flavor-content'}>
-            Region:&nbsp;
-            <Space wrap>
-                <Select
-                    className={'select-box-class'}
-                    value={regionValue}
-                    style={{ width: 120 }}
-                    onChange={handleChangeRegion}
-                    options={regionOptions}
-                />
-            </Space>
-        </div>
+        <>
+            <div className={'cloud-provider-tab-class region-flavor-content'}>Region:</div>
+            <div className={'cloud-provider-tab-class region-flavor-content'}>
+                <Space wrap>
+                    <Select
+                        className={'select-box-class'}
+                        value={regionValue}
+                        style={{ width: 450 }}
+                        onChange={handleChangeRegion}
+                        options={regionOptions}
+                    />
+                </Space>
+            </div>
+        </>
     );
 };

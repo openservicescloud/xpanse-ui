@@ -11,6 +11,7 @@ import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import {
     CreateRequestCategoryEnum,
     CreateRequestCspEnum,
+    Flavor,
     Ocl,
     RegisterServiceEntity,
 } from '../../../xpanse-api/generated';
@@ -24,8 +25,10 @@ function CreateService(): JSX.Element {
     const [versionValue, setVersionValue] = useState<string>('');
     const [serviceName, setServiceName] = useState<string>('');
     const [categoryName, setCategoryName] = useState<string>('');
-    const [oclList, setOclList] = useState<Ocl[]>([]);
     const [service, setService] = useState<RegisterServiceEntity | undefined>(undefined);
+    const [versionMapper, setVersionMapper] = useState<Map<string, RegisterServiceEntity[]>>(
+        new Map<string, RegisterServiceEntity[]>()
+    );
     const location = useLocation();
 
     const handleChangeVersion = (value: string) => {
@@ -36,6 +39,18 @@ function CreateService(): JSX.Element {
         navigate(-1);
     };
 
+    function group(list: any[], key: string): Map<string, any[]> {
+        let map: Map<string, any[]> = new Map<string, any[]>();
+        list.map((val) => {
+            if (!map.has(val[key])) {
+                map.set(
+                    val[key],
+                    list.filter((data) => data[key] == val[key])
+                );
+            }
+        });
+        return map;
+    }
     const gotoOrderSubmit = function () {
         let props: OrderSubmitProps = {
             category: categoryName as CreateRequestCategoryEnum,
@@ -79,22 +94,15 @@ function CreateService(): JSX.Element {
         setServiceName(serviceName);
         serviceVendorApi.listRegisteredServices(categoryName, '', serviceName, '').then((rsp) => {
             if (rsp.length > 0) {
-                console.log('rsp from CreateService: ', rsp);
                 let versions: { value: string; label: string }[] = [];
-                let ocl: Ocl[] = [];
-                let versionInfo = new Set();
-                rsp.forEach((item) => {
-                    versionInfo.add(item.ocl?.serviceVersion);
-                    let versionItem = { value: item.ocl?.serviceVersion || '', label: item.ocl?.serviceVersion || '' };
+                const result: Map<string, RegisterServiceEntity[]> = group(rsp, 'version');
+                setVersionMapper(result);
+                result.forEach((v, k) => {
+                    let versionItem = { value: k || '', label: k || '' };
                     versions.push(versionItem);
-                    let oclItem: Ocl | undefined = item.ocl;
-                    if (oclItem instanceof Ocl) {
-                        ocl.push(oclItem);
-                    }
                 });
                 setVersionOptions(versions);
                 setVersionValue(versions[0].value);
-                setOclList(ocl);
             } else {
                 return;
             }
@@ -118,7 +126,7 @@ function CreateService(): JSX.Element {
                     />
                 </div>
                 <Divider />
-                <SelectCloudProvider versionValue={versionValue} oclList={oclList} />
+                <SelectCloudProvider versionValue={versionValue} versionMapper={versionMapper} />
             </div>
             <div>
                 <div className={'Line'} />
