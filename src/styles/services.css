@@ -27,6 +27,31 @@
     border: 2px solid #1677ff;
 }
 
+.cloud-provider-select {
+    display: flex;
+    flex-flow: nowrap row;
+    padding: 0px;
+    width: 200px;
+    height: 58px;
+    margin: 10px;
+    border: 1px solid #f2f1f1;
+}
+
+.cloud-provider-select:hover {
+    cursor: pointer;
+    display: flex;
+    flex-flow: nowrap row;
+    padding: 0px;
+    width: 200px;
+    height: 58px;
+    margin: 10px;
+    border: 1px solid #1677ff;
+    outline: 1px transparent dashed;
+    outline-offset:-10px;
+    border-radius:4%;
+    /*background:#795548;*/
+}
+
 .service-type-option-image {
     display: flex;
     justify-content: center;
