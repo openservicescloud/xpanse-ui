@@ -40,9 +40,7 @@ export const SelectFlavor = ({
 
     return (
         <>
-            <div className={'cloud-provider-tab-class region-flavor-content'}>
-                Flavor:
-            </div>
+            <div className={'cloud-provider-tab-class region-flavor-content'}>Flavor:</div>
             <div className={'cloud-provider-tab-class region-flavor-content'}>
                 <Space wrap>
                     <Select

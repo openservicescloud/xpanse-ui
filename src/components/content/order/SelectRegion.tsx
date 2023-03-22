@@ -40,9 +40,7 @@ export const SelectRegion = ({ areaValue, areaList }: { areaValue: string; areaL
 
     return (
         <>
-        <div className={'cloud-provider-tab-class region-flavor-content'}>
-            Region:
-        </div>
+            <div className={'cloud-provider-tab-class region-flavor-content'}>Region:</div>
             <div className={'cloud-provider-tab-class region-flavor-content'}>
                 <Space wrap>
                     <Select

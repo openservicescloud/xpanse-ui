@@ -6,17 +6,15 @@
 import { useEffect, useState } from 'react';
 import { To, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Divider, Select } from 'antd';
-import { HomeOutlined, LeftOutlined } from '@ant-design/icons';
 import { SelectCloudProvider } from './SelectCloudProvider';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import {
     CreateRequestCategoryEnum,
     CreateRequestCspEnum,
+    Flavor,
     Ocl,
     RegisterServiceEntity,
-    VersionOclVo,
 } from '../../../xpanse-api/generated';
-import { SelectFlavor } from './SelectFlavor';
 import { OrderSubmitProps } from './OrderSubmit';
 import { DeployParam } from './VariableElement/OrderCommon';
 import Navigate from './Navigate';
@@ -27,8 +25,10 @@ function CreateService(): JSX.Element {
     const [versionValue, setVersionValue] = useState<string>('');
     const [serviceName, setServiceName] = useState<string>('');
     const [categoryName, setCategoryName] = useState<string>('');
-    const [oclList, setOclList] = useState<Ocl[]>([]);
     const [service, setService] = useState<RegisterServiceEntity | undefined>(undefined);
+    const [versionMapper, setVersionMapper] = useState<Map<string, RegisterServiceEntity[]>>(
+        new Map<string, RegisterServiceEntity[]>()
+    );
     const location = useLocation();
 
     const handleChangeVersion = (value: string) => {
@@ -39,11 +39,14 @@ function CreateService(): JSX.Element {
         navigate(-1);
     };
 
-    function group(list:any[], key:string): Map<string, any[]>{
-        let map:Map<string, any[]> = new Map<string, any[]>();
-        list.map(val=>{
-            if(!map.has(val[key])){
-                map.set(val[key],list.filter(data=>data[key]==val[key]));
+    function group(list: any[], key: string): Map<string, any[]> {
+        let map: Map<string, any[]> = new Map<string, any[]>();
+        list.map((val) => {
+            if (!map.has(val[key])) {
+                map.set(
+                    val[key],
+                    list.filter((data) => data[key] == val[key])
+                );
             }
         });
         return map;
@@ -92,11 +95,12 @@ function CreateService(): JSX.Element {
         serviceVendorApi.listRegisteredServices(categoryName, '', serviceName, '').then((rsp) => {
             if (rsp.length > 0) {
                 let versions: { value: string; label: string }[] = [];
-                const result:Map<string, RegisterServiceEntity[]> = group(rsp,"version");
-                result.forEach((v,k)=>{
+                const result: Map<string, RegisterServiceEntity[]> = group(rsp, 'version');
+                setVersionMapper(result);
+                result.forEach((v, k) => {
                     let versionItem = { value: k || '', label: k || '' };
                     versions.push(versionItem);
-                })
+                });
                 setVersionOptions(versions);
                 setVersionValue(versions[0].value);
             } else {
@@ -122,7 +126,7 @@ function CreateService(): JSX.Element {
                     />
                 </div>
                 <Divider />
-                <SelectCloudProvider versionValue={versionValue} oclList={oclList} />
+                <SelectCloudProvider versionValue={versionValue} versionMapper={versionMapper} />
             </div>
             <div>
                 <div className={'Line'} />

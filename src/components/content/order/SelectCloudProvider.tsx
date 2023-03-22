@@ -7,22 +7,23 @@ import { useEffect, useState } from 'react';
 import { Divider, Select, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import { SelectArea } from './SelectArea';
-import { Area, Flavor, Ocl } from '../../../xpanse-api/generated';
+import { Area, Flavor, Ocl, RegisterServiceEntity } from '../../../xpanse-api/generated';
 import { SelectFlavor } from './SelectFlavor';
 
 type TabPosition = 'left' | 'right' | 'top' | 'bottom';
 export const SelectCloudProvider = ({
     versionValue,
-    oclList,
+    versionMapper,
 }: {
     versionValue: string;
-    oclList: Ocl[];
+    versionMapper: Map<string, RegisterServiceEntity[]>;
 }): JSX.Element => {
     const [tabPosition, setTabPosition] = useState<TabPosition>('top');
     const [cloudProviderValue, setCloudProviderValue] = useState<string>('');
     const [cloudServiceProviderList, setCloudServiceProviderList] = useState<Tab[]>([]);
     const [flavorMapper, setFlavorMapper] = useState<Map<string, Flavor[]>>(new Map<string, Flavor[]>());
     const [areaMapper, setAreaMapper] = useState<Map<string, Area[]>>(new Map<string, Area[]>());
+    const [oclList, setOclList] = useState<Ocl[]>([]);
 
     const onChange = (key: string) => {
         setCloudProviderValue(key);
@@ -31,6 +32,18 @@ export const SelectCloudProvider = ({
     useEffect(() => {
         const flavorMapper: Map<string, Flavor[]> = new Map<string, Flavor[]>();
         const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
+        versionMapper.forEach((v, k) => {
+            if (k === versionValue) {
+                let ocls: Ocl[] = [];
+                v.map((registerServiceEntity) => {
+                    let oclItem: Ocl | undefined = registerServiceEntity.ocl;
+                    if (oclItem instanceof Ocl) {
+                        ocls.push(oclItem);
+                    }
+                });
+                setOclList(ocls);
+            }
+        });
         const items: Tab[] = oclList
             .filter((v) => (v as Ocl).serviceVersion === versionValue)
             .flatMap((v) => {
@@ -41,7 +54,7 @@ export const SelectCloudProvider = ({
                     return { key: '', label: '' };
                 }
                 areaMapper.set(v.cloudServiceProvider.name || '', v.cloudServiceProvider.areas || []);
-                flavorMapper.set(v.serviceVersion, v.flavors);
+                flavorMapper.set(v.serviceVersion || '', v.flavors || []);
                 setCloudProviderValue(v.cloudServiceProvider.name);
                 const name = v.cloudServiceProvider.name;
                 return {
@@ -61,7 +74,7 @@ export const SelectCloudProvider = ({
                     Cloud Service Provider
             </div>
             <div className={'cloud-provider-tab-class content-title'}>
-                <Tabs type="card" tabPosition={tabPosition} items={cloudServiceProviderList} onChange={onChange} />
+                <Tabs type='card' tabPosition={tabPosition} items={cloudServiceProviderList} onChange={onChange} />
             </div>
             <SelectArea cloudProviderValue={cloudProviderValue} areaMapper={areaMapper} />
             <SelectFlavor versionValue={versionValue} flavorMapper={flavorMapper} />

@@ -179,10 +179,12 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             <div>
                 <Navigate text={'<< Back'} to={-1 as To} />
                 <div className={'Line'} />
-            </div>
-            <div className={'services-content'}>
-                <div className={'content-title'}>
-                    Service: {props.name}@{props.version}
+                <HomeOutlined />
+                <div className={'order-service-title'}>
+                    Service:{' '}
+                    <span className={'order-service-title-version'}>
+                        {props.name}@{props.version}
+                    </span>
                 </div>
             </div>
             <div>{tip}</div>
