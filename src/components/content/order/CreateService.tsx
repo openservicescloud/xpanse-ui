@@ -53,7 +53,7 @@ function CreateService(): JSX.Element {
     const [versionValue, setVersionValue] = useState<string>('');
     const [serviceName, setServiceName] = useState<string>('');
     const [categoryName, setCategoryName] = useState<string>('');
-    const [service, setService] = useState<RegisterServiceEntity | undefined>(undefined);
+    const [service, setService] = useState<Ocl | undefined>(undefined);
     const [versionMapper, setVersionMapper] = useState<Map<string, RegisterServiceEntity[]>>(
         new Map<string, RegisterServiceEntity[]>()
     );
@@ -139,14 +139,14 @@ function CreateService(): JSX.Element {
             category: categoryName as CreateRequestCategoryEnum,
             name: serviceName,
             version: versionValue,
-            region: 'todo',
-            csp: service === undefined ? 'huawei' : (service.csp as CreateRequestCspEnum),
-            flavor: 'todo',
+            region: regionValue,
+            csp: cloudProviderValue as CreateRequestCspEnum,
+            flavor: flavorValue,
             params: new Array<DeployParam>(),
         };
 
-        if (service !== undefined && service.ocl?.deployment.context !== undefined) {
-            for (let param of service.ocl?.deployment.context) {
+        if (service !== undefined && service?.deployment.context !== undefined) {
+            for (let param of service?.deployment.context) {
                 props.params.push({
                     name: param.name,
                     kind: param.kind,
@@ -166,6 +166,7 @@ function CreateService(): JSX.Element {
             },
         });
     };
+    console.log('service: ', service);
 
     useEffect(() => {
         const categoryName = location.search.split('?')[1].split('&')[0].split('=')[1];
@@ -245,6 +246,7 @@ function CreateService(): JSX.Element {
                                 });
                             }
                         });
+                        setService(item);
                     }
                 }
             });
