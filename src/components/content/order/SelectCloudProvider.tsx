@@ -11,30 +11,27 @@ import { SelectFlavor } from './SelectFlavor';
 
 interface CSP {
     name: string;
-    icon?: string;
-    logo?: string;
+    logo: string;
 }
 
 const defaultLogo: string =
     'https://user-images.githubusercontent.com/1907997/226828054-8d66e3c0-ae2e-451e-8d8f-e414bf7bde9c.png';
 
-const cspMap: Map<CloudServiceProviderNameEnum, CSP> = new Map([
-    [
-        'huawei',
-        {
-            name: 'Huawei',
-            logo: 'https://user-images.githubusercontent.com/1907997/226822430-07591362-4a62-4d31-8a24-823e4b7c4c45.png',
-        },
-    ],
-    [
-        'azure',
-        {
-            name: 'Azure',
-            logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a8/Microsoft_Azure_Logo.svg',
-        },
-    ],
-    ['openstack', { name: 'Openstack', logo: defaultLogo }],
-]);
+const cspList: { name: string; logo: string }[] = [
+    {
+        name: 'Huawei',
+        logo: 'https://user-images.githubusercontent.com/1907997/226822430-07591362-4a62-4d31-8a24-823e4b7c4c45.png',
+    },
+    {
+        name: 'Azure',
+        logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a8/Microsoft_Azure_Logo.svg',
+    },
+    {
+        name: 'Alibaba',
+        logo: 'https://img.alicdn.com/tfs/TB13DzOjXP7gK0jSZFjXXc5aXXa-212-48.png',
+    },
+    { name: 'Openstack', logo: defaultLogo },
+];
 
 type TabPosition = 'left' | 'right' | 'top' | 'bottom';
 export const SelectCloudProvider = ({
@@ -50,15 +47,10 @@ export const SelectCloudProvider = ({
     const [flavorMapper, setFlavorMapper] = useState<Map<string, Flavor[]>>(new Map<string, Flavor[]>());
     const [areaMapper, setAreaMapper] = useState<Map<string, Area[]>>(new Map<string, Area[]>());
 
-    const [csp, setCsp] = useState<CSP[]>([
-        {
-            name: 'Openstack',
-            logo: cspMap.get('openstack')?.logo === undefined ? defaultLogo : cspMap.get('openstack')?.logo,
-        },
-    ]);
+    const [csp, setCsp] = useState<{ name: string; logo: string }[]>([]);
 
     const onChange = (key: string) => {
-        setCloudProviderValue(key);
+        setCloudProviderValue( key.charAt(0).toLowerCase() + key.slice(1));
     };
 
     useEffect(() => {
@@ -69,9 +61,8 @@ export const SelectCloudProvider = ({
             if (k === versionValue) {
                 let ocls: Ocl[] = [];
                 v.map((registerServiceEntity) => {
-                    let oclItem: Ocl | undefined = registerServiceEntity.ocl;
-                    if (oclItem instanceof Ocl) {
-                        ocls.push(oclItem);
+                    if (registerServiceEntity.ocl instanceof Ocl) {
+                        ocls.push(registerServiceEntity.ocl);
                     }
                 });
                 oclList = ocls;
@@ -99,7 +90,35 @@ export const SelectCloudProvider = ({
         setCloudServiceProviderList(items);
         setAreaMapper(areaMapper);
         setFlavorMapper(flavorMapper);
+
+        let cspItems: CSP[] = [];
+        if(oclList.length>0){
+            oclList.forEach((item)=>{
+                if(item.serviceVersion === versionValue){
+                    if (item && item.cloudServiceProvider) {
+                        const name = item.cloudServiceProvider.name;
+                        let result = name.charAt(0).toUpperCase() + name.slice(1);
+                        cspList.forEach((item) => {
+                            if (result === item.name) {
+                                cspItems.push({
+                                    name: item.name,
+                                    logo: item.logo,
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+            setCsp(cspItems);
+            setCloudProviderValue(cspItems[0].name)
+        }else {
+            return;
+        }
+
+
     }, [versionValue, versionMapper]);
+
+    console.log('csp: ', csp);
 
     return (
         <>
@@ -111,26 +130,21 @@ export const SelectCloudProvider = ({
             <div className={'services-content-body'}>
                 {csp.map((item, index) => {
                     return (
-                        <div
+                        <div onClick={(e) => {
+                            onChange(item.name);
+                        }}
                             key={index}
                             // className={'cloud-provider-select'}
                             // onClick={(e) => null}
                         >
-                            {/*<div className='service-type-option-image'>*/}
-                            {/*    <img className='service-type-option-service-icon' src={item.icon} />*/}
-                            {/*</div>*/}
                             <img
                                 className='cloud-provider-select'
                                 src={item.logo}
-                                onClick={(e) => {
-                                    onChange(item.name);
-                                }}
+
                             />
-                            {/*<div className='service-type-option-info'>*/}
-                            {/*    <span className='service-type-option'>{item.name}</span>*/}
-                            {/*    <span className='service-type-option-description'>{item.name}</span>*/}
-                            {/*</div>*/}
-                            Cloud Provider: {cloudProviderValue}
+                            <div className='service-type-option-info'>
+                                <span className='service-type-option-description service-type-option'>Cloud Provider: {item.name}</span>
+                            </div>
                         </div>
                     );
                 })}
