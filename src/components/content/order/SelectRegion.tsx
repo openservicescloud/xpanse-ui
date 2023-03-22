@@ -11,7 +11,6 @@ export const SelectRegion = ({ areaValue, areaList }: { areaValue: string; areaL
     const [regionValue, setRegionValue] = useState<string>('');
     const [regionOptions, setRegionOptions] = useState<{ value: string; label: string }[]>([{ value: '', label: '' }]);
     const handleChangeRegion = (value: string) => {
-        console.log(`selected ${value}`);
         setRegionValue(value);
     };
 
@@ -39,7 +38,6 @@ export const SelectRegion = ({ areaValue, areaList }: { areaValue: string; areaL
             return;
         }
     }, [areaValue, areaList]);
-
     return (
         <>
             <div className={'cloud-provider-tab-class region-flavor-content'}>Region:</div>

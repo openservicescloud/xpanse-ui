@@ -4,12 +4,10 @@
  */
 
 import { useEffect, useState } from 'react';
-import { Divider, Select, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import { SelectArea } from './SelectArea';
 import { Area, RegisterServiceEntity, CloudServiceProviderNameEnum, Flavor, Ocl } from '../../../xpanse-api/generated';
 import { SelectFlavor } from './SelectFlavor';
-import { SelectRegion } from './SelectRegion';
 
 interface CSP {
     name: string;
@@ -52,7 +50,6 @@ export const SelectCloudProvider = ({
     const [flavorMapper, setFlavorMapper] = useState<Map<string, Flavor[]>>(new Map<string, Flavor[]>());
     const [areaMapper, setAreaMapper] = useState<Map<string, Area[]>>(new Map<string, Area[]>());
 
-    const [oclList, setOclList] = useState<Ocl[]>([]);
     const [csp, setCsp] = useState<CSP[]>([
         {
             name: 'Openstack',
@@ -65,7 +62,7 @@ export const SelectCloudProvider = ({
     };
 
     useEffect(() => {
-        let oclList : Ocl[]= [];
+        let oclList: Ocl[] = [];
         const flavorMapper: Map<string, Flavor[]> = new Map<string, Flavor[]>();
         const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
         versionMapper.forEach((v, k) => {
@@ -77,7 +74,7 @@ export const SelectCloudProvider = ({
                         ocls.push(oclItem);
                     }
                 });
-                oclList=ocls;
+                oclList = ocls;
             }
         });
         const items: Tab[] = oclList
