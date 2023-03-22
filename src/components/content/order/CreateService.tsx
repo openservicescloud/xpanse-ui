@@ -6,7 +6,6 @@
 import { useEffect, useState } from 'react';
 import { To, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Divider, Select } from 'antd';
-import { HomeOutlined, LeftOutlined } from '@ant-design/icons';
 import { SelectCloudProvider } from './SelectCloudProvider';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import {
@@ -14,9 +13,7 @@ import {
     CreateRequestCspEnum,
     Ocl,
     RegisterServiceEntity,
-    VersionOclVo,
 } from '../../../xpanse-api/generated';
-import { SelectFlavor } from './SelectFlavor';
 import { OrderSubmitProps } from './OrderSubmit';
 import { DeployParam } from './VariableElement/OrderCommon';
 import Navigate from './Navigate';
@@ -95,7 +92,6 @@ function CreateService(): JSX.Element {
                         ocl.push(oclItem);
                     }
                 });
-
                 setVersionOptions(versions);
                 setVersionValue(versions[0].value);
                 setOclList(ocl);

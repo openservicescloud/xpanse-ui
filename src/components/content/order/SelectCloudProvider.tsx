@@ -41,7 +41,7 @@ export const SelectCloudProvider = ({
                     return { key: '', label: '' };
                 }
                 areaMapper.set(v.cloudServiceProvider.name || '', v.cloudServiceProvider.areas || []);
-                flavorMapper.set(v.serviceVersion, v.flavors);
+                flavorMapper.set(v.serviceVersion || '', v.flavors || []);
                 setCloudProviderValue(v.cloudServiceProvider.name);
                 const name = v.cloudServiceProvider.name;
                 return {
