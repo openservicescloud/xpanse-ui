@@ -35,73 +35,61 @@ export * from './ServiceVo';
 export * from './SystemStatus';
 export * from './VersionOclVo';
 
-
-
 /* tslint:disable:no-unused-variable */
-let primitives = [
-                    "string",
-                    "boolean",
-                    "double",
-                    "integer",
-                    "long",
-                    "float",
-                    "number",
-                    "any"
-                 ];
+let primitives = ['string', 'boolean', 'double', 'integer', 'long', 'float', 'number', 'any'];
 
 const supportedMediaTypes: { [mediaType: string]: number } = {
-  "application/json": Infinity,
-  "application/octet-stream": 0,
-  "application/x-www-form-urlencoded": 0
-}
-
+    'application/json': Infinity,
+    'application/octet-stream': 0,
+    'application/x-www-form-urlencoded': 0,
+};
 
 let enumsMap: Set<string> = new Set<string>([
-    "BillingPeriodEnum",
-    "BillingCurrencyEnum",
-    "CloudServiceProviderNameEnum",
-    "CreateRequestCategoryEnum",
-    "CreateRequestCspEnum",
-    "DeployResourceEntityKindEnum",
-    "DeployServiceEntityCategoryEnum",
-    "DeployServiceEntityCspEnum",
-    "DeployServiceEntityServiceStateEnum",
-    "DeployVariableKindEnum",
-    "DeployVariableTypeEnum",
-    "DeploymentKindEnum",
-    "OclCategoryEnum",
-    "OclDetailVoCategoryEnum",
-    "OclDetailVoServiceStateEnum",
-    "ProviderOclVoNameEnum",
-    "RegisterServiceEntityCspEnum",
-    "RegisterServiceEntityCategoryEnum",
-    "RegisterServiceEntityServiceStateEnum",
-    "ServiceVoCategoryEnum",
-    "ServiceVoCspEnum",
-    "ServiceVoServiceStateEnum",
-    "SystemStatusHealthStatusEnum",
+    'BillingPeriodEnum',
+    'BillingCurrencyEnum',
+    'CloudServiceProviderNameEnum',
+    'CreateRequestCategoryEnum',
+    'CreateRequestCspEnum',
+    'DeployResourceEntityKindEnum',
+    'DeployServiceEntityCategoryEnum',
+    'DeployServiceEntityCspEnum',
+    'DeployServiceEntityServiceStateEnum',
+    'DeployVariableKindEnum',
+    'DeployVariableTypeEnum',
+    'DeploymentKindEnum',
+    'OclCategoryEnum',
+    'OclDetailVoCategoryEnum',
+    'OclDetailVoServiceStateEnum',
+    'ProviderOclVoNameEnum',
+    'RegisterServiceEntityCspEnum',
+    'RegisterServiceEntityCategoryEnum',
+    'RegisterServiceEntityServiceStateEnum',
+    'ServiceVoCategoryEnum',
+    'ServiceVoCspEnum',
+    'ServiceVoServiceStateEnum',
+    'SystemStatusHealthStatusEnum',
 ]);
 
-let typeMap: {[index: string]: any} = {
-    "Area": Area,
-    "Billing": Billing,
-    "CategoryOclVo": CategoryOclVo,
-    "CloudServiceProvider": CloudServiceProvider,
-    "CreateRequest": CreateRequest,
-    "DeployResourceEntity": DeployResourceEntity,
-    "DeployServiceEntity": DeployServiceEntity,
-    "DeployVariable": DeployVariable,
-    "Deployment": Deployment,
-    "Flavor": Flavor,
-    "Ocl": Ocl,
-    "OclDetailVo": OclDetailVo,
-    "ProviderOclVo": ProviderOclVo,
-    "RegisterServiceEntity": RegisterServiceEntity,
-    "Response": Response,
-    "ServiceVo": ServiceVo,
-    "SystemStatus": SystemStatus,
-    "VersionOclVo": VersionOclVo,
-}
+let typeMap: { [index: string]: any } = {
+    Area: Area,
+    Billing: Billing,
+    CategoryOclVo: CategoryOclVo,
+    CloudServiceProvider: CloudServiceProvider,
+    CreateRequest: CreateRequest,
+    DeployResourceEntity: DeployResourceEntity,
+    DeployServiceEntity: DeployServiceEntity,
+    DeployVariable: DeployVariable,
+    Deployment: Deployment,
+    Flavor: Flavor,
+    Ocl: Ocl,
+    OclDetailVo: OclDetailVo,
+    ProviderOclVo: ProviderOclVo,
+    RegisterServiceEntity: RegisterServiceEntity,
+    Response: Response,
+    ServiceVo: ServiceVo,
+    SystemStatus: SystemStatus,
+    VersionOclVo: VersionOclVo,
+};
 
 export class ObjectSerializer {
     public static findCorrectType(data: any, expectedType: string) {
@@ -109,7 +97,7 @@ export class ObjectSerializer {
             return expectedType;
         } else if (primitives.indexOf(expectedType.toLowerCase()) !== -1) {
             return expectedType;
-        } else if (expectedType === "Date") {
+        } else if (expectedType === 'Date') {
             return expectedType;
         } else {
             if (enumsMap.has(expectedType)) {
@@ -127,7 +115,7 @@ export class ObjectSerializer {
             } else {
                 if (data[discriminatorProperty]) {
                     var discriminatorType = data[discriminatorProperty];
-                    if(typeMap[discriminatorType]){
+                    if (typeMap[discriminatorType]) {
                         return discriminatorType; // use the type given in the discriminator
                     } else {
                         return expectedType; // discriminator did not map to a type
@@ -144,8 +132,9 @@ export class ObjectSerializer {
             return data;
         } else if (primitives.indexOf(type.toLowerCase()) !== -1) {
             return data;
-        } else if (type.lastIndexOf("Array<", 0) === 0) { // string.startsWith pre es6
-            let subType: string = type.replace("Array<", ""); // Array<Type> => Type>
+        } else if (type.lastIndexOf('Array<', 0) === 0) {
+            // string.startsWith pre es6
+            let subType: string = type.replace('Array<', ''); // Array<Type> => Type>
             subType = subType.substring(0, subType.length - 1); // Type> => Type
             let transformedData: any[] = [];
             for (let index in data) {
@@ -153,14 +142,14 @@ export class ObjectSerializer {
                 transformedData.push(ObjectSerializer.serialize(date, subType, format));
             }
             return transformedData;
-        } else if (type === "Date") {
-            if (format == "date") {
-                let month = data.getMonth()+1
-                month = month < 10 ? "0" + month.toString() : month.toString()
+        } else if (type === 'Date') {
+            if (format == 'date') {
+                let month = data.getMonth() + 1;
+                month = month < 10 ? '0' + month.toString() : month.toString();
                 let day = data.getDate();
-                day = day < 10 ? "0" + day.toString() : day.toString();
+                day = day < 10 ? '0' + day.toString() : day.toString();
 
-                return data.getFullYear() + "-" + month + "-" + day;
+                return data.getFullYear() + '-' + month + '-' + day;
             } else {
                 return data.toISOString();
             }
@@ -168,7 +157,8 @@ export class ObjectSerializer {
             if (enumsMap.has(type)) {
                 return data;
             }
-            if (!typeMap[type]) { // in case we dont know the type
+            if (!typeMap[type]) {
+                // in case we dont know the type
                 return data;
             }
 
@@ -177,10 +167,14 @@ export class ObjectSerializer {
 
             // get the map for the correct type.
             let attributeTypes = typeMap[type].getAttributeTypeMap();
-            let instance: {[index: string]: any} = {};
+            let instance: { [index: string]: any } = {};
             for (let index in attributeTypes) {
                 let attributeType = attributeTypes[index];
-                instance[attributeType.baseName] = ObjectSerializer.serialize(data[attributeType.name], attributeType.type, attributeType.format);
+                instance[attributeType.baseName] = ObjectSerializer.serialize(
+                    data[attributeType.name],
+                    attributeType.type,
+                    attributeType.format
+                );
             }
             return instance;
         }
@@ -193,8 +187,9 @@ export class ObjectSerializer {
             return data;
         } else if (primitives.indexOf(type.toLowerCase()) !== -1) {
             return data;
-        } else if (type.lastIndexOf("Array<", 0) === 0) { // string.startsWith pre es6
-            let subType: string = type.replace("Array<", ""); // Array<Type> => Type>
+        } else if (type.lastIndexOf('Array<', 0) === 0) {
+            // string.startsWith pre es6
+            let subType: string = type.replace('Array<', ''); // Array<Type> => Type>
             subType = subType.substring(0, subType.length - 1); // Type> => Type
             let transformedData: any[] = [];
             for (let index in data) {
@@ -202,21 +197,27 @@ export class ObjectSerializer {
                 transformedData.push(ObjectSerializer.deserialize(date, subType, format));
             }
             return transformedData;
-        } else if (type === "Date") {
+        } else if (type === 'Date') {
             return new Date(data);
         } else {
-            if (enumsMap.has(type)) {// is Enum
+            if (enumsMap.has(type)) {
+                // is Enum
                 return data;
             }
 
-            if (!typeMap[type]) { // dont know the type
+            if (!typeMap[type]) {
+                // dont know the type
                 return data;
             }
             let instance = new typeMap[type]();
             let attributeTypes = typeMap[type].getAttributeTypeMap();
             for (let index in attributeTypes) {
                 let attributeType = attributeTypes[index];
-                let value = ObjectSerializer.deserialize(data[attributeType.baseName], attributeType.type, attributeType.format);
+                let value = ObjectSerializer.deserialize(
+                    data[attributeType.baseName],
+                    attributeType.type,
+                    attributeType.format
+                );
                 if (value !== undefined) {
                     instance[attributeType.name] = value;
                 }
@@ -224,7 +225,6 @@ export class ObjectSerializer {
             return instance;
         }
     }
-
 
     /**
      * Normalize media type
@@ -236,7 +236,7 @@ export class ObjectSerializer {
         if (mediaType === undefined) {
             return undefined;
         }
-        return mediaType.split(";")[0].trim().toLowerCase();
+        return mediaType.split(';')[0].trim().toLowerCase();
     }
 
     /**
@@ -248,7 +248,7 @@ export class ObjectSerializer {
     public static getPreferredMediaType(mediaTypes: Array<string>): string {
         /** According to OAS 3 we should default to json */
         if (!mediaTypes) {
-            return "application/json";
+            return 'application/json';
         }
 
         const normalMediaTypes = mediaTypes.map(this.normalizeMediaType);
@@ -262,7 +262,7 @@ export class ObjectSerializer {
         }
 
         if (selectedMediaType === undefined) {
-            throw new Error("None of the given media types are supported: " + mediaTypes.join(", "));
+            throw new Error('None of the given media types are supported: ' + mediaTypes.join(', '));
         }
 
         return selectedMediaType!;
@@ -272,15 +272,15 @@ export class ObjectSerializer {
      * Convert data to a string according the given media type
      */
     public static stringify(data: any, mediaType: string): string {
-        if (mediaType === "text/plain") {
+        if (mediaType === 'text/plain') {
             return String(data);
         }
 
-        if (mediaType === "application/json") {
+        if (mediaType === 'application/json') {
             return JSON.stringify(data);
         }
 
-        throw new Error("The mediaType " + mediaType + " is not supported by ObjectSerializer.stringify.");
+        throw new Error('The mediaType ' + mediaType + ' is not supported by ObjectSerializer.stringify.');
     }
 
     /**
@@ -288,18 +288,18 @@ export class ObjectSerializer {
      */
     public static parse(rawData: string, mediaType: string | undefined) {
         if (mediaType === undefined) {
-            throw new Error("Cannot parse content. No Content-Type defined.");
+            throw new Error('Cannot parse content. No Content-Type defined.');
         }
 
-        if (mediaType === "text/plain") {
+        if (mediaType === 'text/plain') {
             return rawData;
         }
 
-        if (mediaType === "application/json") {
+        if (mediaType === 'application/json') {
             return JSON.parse(rawData);
         }
 
-        if (mediaType === "text/html") {
+        if (mediaType === 'text/html') {
             return rawData;
         }
 
@@ -307,6 +307,6 @@ export class ObjectSerializer {
             return YAML.parse(rawData);
         }
 
-        throw new Error("The mediaType " + mediaType + " is not supported by ObjectSerializer.parse.");
+        throw new Error('The mediaType ' + mediaType + ' is not supported by ObjectSerializer.parse.');
     }
 }

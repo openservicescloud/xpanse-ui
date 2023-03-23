@@ -7,14 +7,13 @@ import { Form, Input, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { DeployParam, TextInputEventHandler } from './OrderCommon';
 
-export function OrderTextInput(
-    {
-        item,
-        onChangeHandler
-    }: {
-        item: DeployParam;
-        onChangeHandler: TextInputEventHandler;
-    }): JSX.Element {
+export function OrderTextInput({
+    item,
+    onChangeHandler,
+}: {
+    item: DeployParam;
+    onChangeHandler: TextInputEventHandler;
+}): JSX.Element {
     return (
         <div className={'order-param-item-row'}>
             <div className={'order-param-item-left'} />

@@ -1,7 +1,7 @@
 .order-navigate {
     display: flex;
     border: 1px solid transparent;
-    color: #F97025;
+    color: #f97025;
     font-weight: bold;
     padding: 10px;
 }
@@ -60,7 +60,7 @@
     margin-right: 30px;
     margin-bottom: 15px;
     background-color: #f0f0f0;
-    word-wrap:break-word;
+    word-wrap: break-word;
 }
 
 .order-param-submit {
@@ -71,7 +71,7 @@
     margin-bottom: 15px;
 }
 
-.deploying{
+.deploying {
     pointer-events: none;
 }
 
@@ -135,8 +135,8 @@
     margin: 10px;
     border: 1px solid #1677ff;
     outline: 1px transparent dashed;
-    outline-offset:-10px;
-    border-radius:4%;
+    outline-offset: -10px;
+    border-radius: 4%;
     /*background:#795548;*/
 }
 
@@ -150,8 +150,8 @@
     margin: 10px;
     border: 1px solid #1677ff;
     outline: 1px transparent dashed;
-    outline-offset:-10px;
-    border-radius:4%;
+    outline-offset: -10px;
+    border-radius: 4%;
     /*background:#795548;*/
 }
 
@@ -190,12 +190,12 @@
     color: #5e6366;
     min-height: 35px;
     margin-top: 5px;
-    word-break:normal;
-    width:auto;
-    display:block;
-    white-space:pre-wrap;
-    word-wrap : break-word ;
-    overflow: hidden
+    word-break: normal;
+    width: auto;
+    display: block;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow: hidden;
 }
 
 .back-button-class {
@@ -211,7 +211,7 @@
     box-sizing: border-box;
 }
 
-.region-flavor-content{
+.region-flavor-content {
     font-size: 14px;
     font-weight: bold;
 }

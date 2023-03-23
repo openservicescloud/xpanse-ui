@@ -114,7 +114,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         Tip(
             'success',
             (('Deploying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000)) as string) +
-            's]'
+                's]'
         );
         serviceApi
             .serviceDetail(uuid)
@@ -138,8 +138,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                     TipClear();
                 }
             })
-            .finally(() => {
-            });
+            .finally(() => {});
     }
 
     function OnSubmit() {
@@ -173,8 +172,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 setDeploying(false);
                 // setUuid(undefined);
             })
-            .finally(() => {
-            });
+            .finally(() => {});
     }
 
     return (
@@ -197,10 +195,13 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 key='deploy'
             >
                 <div className={deploying ? 'deploying order-param-item-row' : ''}>
-                    {parameters.map((item) => (
-                        item.kind === 'variable' || item.kind === 'env' ?
-                            <OrderItem key={item.name} item={item} onChangeHandler={GetOnChangeHandler(item)} /> : <></>
-                    ))}
+                    {parameters.map((item) =>
+                        item.kind === 'variable' || item.kind === 'env' ? (
+                            <OrderItem key={item.name} item={item} onChangeHandler={GetOnChangeHandler(item)} />
+                        ) : (
+                            <></>
+                        )
+                    )}
                 </div>
                 <div className={'Line'} />
                 <div className={'order-param-item-row'}>

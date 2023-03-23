@@ -6,14 +6,13 @@
 import { NumberInputEventHandler, DeployParam } from './OrderCommon';
 import { Form, InputNumber } from 'antd';
 
-export function OrderNumberInput(
-    {
-        item,
-        onChangeHandler
-    }: {
-        item: DeployParam;
-        onChangeHandler: NumberInputEventHandler;
-    }): JSX.Element {
+export function OrderNumberInput({
+    item,
+    onChangeHandler,
+}: {
+    item: DeployParam;
+    onChangeHandler: NumberInputEventHandler;
+}): JSX.Element {
     return (
         <div className={'order-param-item-row'}>
             <div className={'order-param-item-left'} />

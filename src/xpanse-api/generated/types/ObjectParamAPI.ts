@@ -1,18 +1,19 @@
 import { ResponseContext, RequestContext, HttpFile } from '../http/http';
-import { Configuration} from '../configuration'
-
-
+import { Configuration } from '../configuration';
 
 import { ObservableAdminApi, ObservableServiceApi } from './ObservableAPI';
-import { AdminApiRequestFactory, AdminApiResponseProcessor} from "../apis/AdminApi";
+import { AdminApiRequestFactory, AdminApiResponseProcessor } from '../apis/AdminApi';
 
-export interface AdminApiHealthRequest {
-}
+export interface AdminApiHealthRequest {}
 
 export class ObjectAdminApi {
-    private api: ObservableAdminApi
+    private api: ObservableAdminApi;
 
-    public constructor(configuration: Configuration, requestFactory?: AdminApiRequestFactory, responseProcessor?: AdminApiResponseProcessor) {
+    public constructor(
+        configuration: Configuration,
+        requestFactory?: AdminApiRequestFactory,
+        responseProcessor?: AdminApiResponseProcessor
+    ) {
         this.api = new ObservableAdminApi(configuration, requestFactory, responseProcessor);
     }
 
@@ -20,37 +21,35 @@ export class ObjectAdminApi {
      * @param param the request object
      */
     public health(param: AdminApiHealthRequest = {}, options?: Configuration): Promise<SystemStatus> {
-        return this.api.health( options).toPromise();
+        return this.api.health(options).toPromise();
     }
-
 }
-
 
 export interface ServiceApiDeployRequest {
     /**
-     * 
+     *
      * @type CreateRequest
      * @memberof ServiceApideploy
      */
-    createRequest: CreateRequest
+    createRequest: CreateRequest;
 }
 
 export interface ServiceApiDestroyRequest {
     /**
-     * 
+     *
      * @type string
      * @memberof ServiceApidestroy
      */
-    id: string
+    id: string;
 }
 
 export interface ServiceApiOpenApiRequest {
     /**
-     * 
+     *
      * @type string
      * @memberof ServiceApiopenApi
      */
-    id: string
+    id: string;
 }
 
 export interface ServiceApiServiceDetailRequest {
@@ -59,16 +58,19 @@ export interface ServiceApiServiceDetailRequest {
      * @type string
      * @memberof ServiceApiserviceDetail
      */
-    id: string
+    id: string;
 }
 
-export interface ServiceApiServicesRequest {
-}
+export interface ServiceApiServicesRequest {}
 
 export class ObjectServiceApi {
-    private api: ObservableServiceApi
+    private api: ObservableServiceApi;
 
-    public constructor(configuration: Configuration, requestFactory?: ServiceApiRequestFactory, responseProcessor?: ServiceApiResponseProcessor) {
+    public constructor(
+        configuration: Configuration,
+        requestFactory?: ServiceApiRequestFactory,
+        responseProcessor?: ServiceApiResponseProcessor
+    ) {
         this.api = new ObservableServiceApi(configuration, requestFactory, responseProcessor);
     }
 
@@ -77,7 +79,7 @@ export class ObjectServiceApi {
      * @param param the request object
      */
     public deploy(param: ServiceApiDeployRequest, options?: Configuration): Promise<string> {
-        return this.api.deploy(param.createRequest,  options).toPromise();
+        return this.api.deploy(param.createRequest, options).toPromise();
     }
 
     /**
@@ -85,14 +87,14 @@ export class ObjectServiceApi {
      * @param param the request object
      */
     public destroy(param: ServiceApiDestroyRequest, options?: Configuration): Promise<Response> {
-        return this.api.destroy(param.id,  options).toPromise();
+        return this.api.destroy(param.id, options).toPromise();
     }
 
     /**
      * @param param the request object
      */
     public openApi(param: ServiceApiOpenApiRequest, options?: Configuration): Promise<string> {
-        return this.api.openApi(param.id,  options).toPromise();
+        return this.api.openApi(param.id, options).toPromise();
     }
 
     /**
@@ -100,7 +102,7 @@ export class ObjectServiceApi {
      * @param param the request object
      */
     public serviceDetail(param: ServiceApiServiceDetailRequest, options?: Configuration): Promise<DeployServiceEntity> {
-        return this.api.serviceDetail(param.id,  options).toPromise();
+        return this.api.serviceDetail(param.id, options).toPromise();
     }
 
     /**
@@ -108,13 +110,12 @@ export class ObjectServiceApi {
      * @param param the request object
      */
     public services(param: ServiceApiServicesRequest = {}, options?: Configuration): Promise<Array<ServiceVo>> {
-        return this.api.services( options).toPromise();
+        return this.api.services(options).toPromise();
     }
-
 }
 
-import { ObservableServiceVendorApi } from "./ObservableAPI";
-import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor} from "../apis/ServiceVendorApi";
+import { ObservableServiceVendorApi } from './ObservableAPI';
+import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
 import { SystemStatus } from '../models/SystemStatus';
 import { CreateRequest } from '../models/CreateRequest';
 import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
@@ -131,7 +132,7 @@ export interface ServiceVendorApiDetailRequest {
      * @type string
      * @memberof ServiceVendorApidetail
      */
-    id: string
+    id: string;
 }
 
 export interface ServiceVendorApiFetchRequest {
@@ -140,7 +141,7 @@ export interface ServiceVendorApiFetchRequest {
      * @type string
      * @memberof ServiceVendorApifetch
      */
-    oclLocation: string
+    oclLocation: string;
 }
 
 export interface ServiceVendorApiFetchUpdateRequest {
@@ -149,17 +150,16 @@ export interface ServiceVendorApiFetchUpdateRequest {
      * @type string
      * @memberof ServiceVendorApifetchUpdate
      */
-    id: string
+    id: string;
     /**
      * URL of Ocl file
      * @type string
      * @memberof ServiceVendorApifetchUpdate
      */
-    oclLocation: string
+    oclLocation: string;
 }
 
-export interface ServiceVendorApiListCategoriesRequest {
-}
+export interface ServiceVendorApiListCategoriesRequest {}
 
 export interface ServiceVendorApiListRegisteredServicesRequest {
     /**
@@ -167,25 +167,25 @@ export interface ServiceVendorApiListRegisteredServicesRequest {
      * @type string
      * @memberof ServiceVendorApilistRegisteredServices
      */
-    categoryName?: string
+    categoryName?: string;
     /**
      * name of the service provider
      * @type string
      * @memberof ServiceVendorApilistRegisteredServices
      */
-    cspName?: string
+    cspName?: string;
     /**
      * name of the service
      * @type string
      * @memberof ServiceVendorApilistRegisteredServices
      */
-    serviceName?: string
+    serviceName?: string;
     /**
      * version of the service
      * @type string
      * @memberof ServiceVendorApilistRegisteredServices
      */
-    serviceVersion?: string
+    serviceVersion?: string;
 }
 
 export interface ServiceVendorApiListRegisteredServicesTreeRequest {
@@ -194,16 +194,16 @@ export interface ServiceVendorApiListRegisteredServicesTreeRequest {
      * @type string
      * @memberof ServiceVendorApilistRegisteredServicesTree
      */
-    categoryName: string
+    categoryName: string;
 }
 
 export interface ServiceVendorApiRegisterRequest {
     /**
-     * 
+     *
      * @type Ocl
      * @memberof ServiceVendorApiregister
      */
-    ocl: Ocl
+    ocl: Ocl;
 }
 
 export interface ServiceVendorApiUnregisterRequest {
@@ -212,7 +212,7 @@ export interface ServiceVendorApiUnregisterRequest {
      * @type string
      * @memberof ServiceVendorApiunregister
      */
-    id: string
+    id: string;
 }
 
 export interface ServiceVendorApiUpdateRequest {
@@ -221,19 +221,23 @@ export interface ServiceVendorApiUpdateRequest {
      * @type string
      * @memberof ServiceVendorApiupdate
      */
-    id: string
+    id: string;
     /**
-     * 
+     *
      * @type Ocl
      * @memberof ServiceVendorApiupdate
      */
-    ocl: Ocl
+    ocl: Ocl;
 }
 
 export class ObjectServiceVendorApi {
-    private api: ObservableServiceVendorApi
+    private api: ObservableServiceVendorApi;
 
-    public constructor(configuration: Configuration, requestFactory?: ServiceVendorApiRequestFactory, responseProcessor?: ServiceVendorApiResponseProcessor) {
+    public constructor(
+        configuration: Configuration,
+        requestFactory?: ServiceVendorApiRequestFactory,
+        responseProcessor?: ServiceVendorApiResponseProcessor
+    ) {
         this.api = new ObservableServiceVendorApi(configuration, requestFactory, responseProcessor);
     }
 
@@ -242,7 +246,7 @@ export class ObjectServiceVendorApi {
      * @param param the request object
      */
     public detail(param: ServiceVendorApiDetailRequest, options?: Configuration): Promise<OclDetailVo> {
-        return this.api.detail(param.id,  options).toPromise();
+        return this.api.detail(param.id, options).toPromise();
     }
 
     /**
@@ -250,7 +254,7 @@ export class ObjectServiceVendorApi {
      * @param param the request object
      */
     public fetch(param: ServiceVendorApiFetchRequest, options?: Configuration): Promise<string> {
-        return this.api.fetch(param.oclLocation,  options).toPromise();
+        return this.api.fetch(param.oclLocation, options).toPromise();
     }
 
     /**
@@ -258,31 +262,42 @@ export class ObjectServiceVendorApi {
      * @param param the request object
      */
     public fetchUpdate(param: ServiceVendorApiFetchUpdateRequest, options?: Configuration): Promise<Response> {
-        return this.api.fetchUpdate(param.id, param.oclLocation,  options).toPromise();
+        return this.api.fetchUpdate(param.id, param.oclLocation, options).toPromise();
     }
 
     /**
      * Get category list.
      * @param param the request object
      */
-    public listCategories(param: ServiceVendorApiListCategoriesRequest = {}, options?: Configuration): Promise<Array<string>> {
-        return this.api.listCategories( options).toPromise();
+    public listCategories(
+        param: ServiceVendorApiListCategoriesRequest = {},
+        options?: Configuration
+    ): Promise<Array<string>> {
+        return this.api.listCategories(options).toPromise();
     }
 
     /**
      * List registered service with query params.
      * @param param the request object
      */
-    public listRegisteredServices(param: ServiceVendorApiListRegisteredServicesRequest = {}, options?: Configuration): Promise<Array<RegisterServiceEntity>> {
-        return this.api.listRegisteredServices(param.categoryName, param.cspName, param.serviceName, param.serviceVersion,  options).toPromise();
+    public listRegisteredServices(
+        param: ServiceVendorApiListRegisteredServicesRequest = {},
+        options?: Configuration
+    ): Promise<Array<RegisterServiceEntity>> {
+        return this.api
+            .listRegisteredServices(param.categoryName, param.cspName, param.serviceName, param.serviceVersion, options)
+            .toPromise();
     }
 
     /**
      * List registered service group by serviceName, serviceVersion, cspName with category.
      * @param param the request object
      */
-    public listRegisteredServicesTree(param: ServiceVendorApiListRegisteredServicesTreeRequest, options?: Configuration): Promise<Array<CategoryOclVo>> {
-        return this.api.listRegisteredServicesTree(param.categoryName,  options).toPromise();
+    public listRegisteredServicesTree(
+        param: ServiceVendorApiListRegisteredServicesTreeRequest,
+        options?: Configuration
+    ): Promise<Array<CategoryOclVo>> {
+        return this.api.listRegisteredServicesTree(param.categoryName, options).toPromise();
     }
 
     /**
@@ -290,7 +305,7 @@ export class ObjectServiceVendorApi {
      * @param param the request object
      */
     public register(param: ServiceVendorApiRegisterRequest, options?: Configuration): Promise<string> {
-        return this.api.register(param.ocl,  options).toPromise();
+        return this.api.register(param.ocl, options).toPromise();
     }
 
     /**
@@ -298,7 +313,7 @@ export class ObjectServiceVendorApi {
      * @param param the request object
      */
     public unregister(param: ServiceVendorApiUnregisterRequest, options?: Configuration): Promise<Response> {
-        return this.api.unregister(param.id,  options).toPromise();
+        return this.api.unregister(param.id, options).toPromise();
     }
 
     /**
@@ -306,7 +321,6 @@ export class ObjectServiceVendorApi {
      * @param param the request object
      */
     public update(param: ServiceVendorApiUpdateRequest, options?: Configuration): Promise<Response> {
-        return this.api.update(param.id, param.ocl,  options).toPromise();
+        return this.api.update(param.id, param.ocl, options).toPromise();
     }
-
 }

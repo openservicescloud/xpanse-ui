@@ -1,10 +1,9 @@
 import { ResponseContext, RequestContext, HttpFile } from '../http/http';
-import { Configuration} from '../configuration'
+import { Configuration } from '../configuration';
 import { Observable, of, from } from '../rxjsStub';
-import {mergeMap, map} from  '../rxjsStub';
+import { mergeMap, map } from '../rxjsStub';
 
-
-import { AdminApiRequestFactory, AdminApiResponseProcessor} from "../apis/AdminApi";
+import { AdminApiRequestFactory, AdminApiResponseProcessor } from '../apis/AdminApi';
 import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
 import { SystemStatus } from '../models/SystemStatus';
 import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
@@ -38,19 +37,27 @@ export class ObservableAdminApi {
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
         }
 
-        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-            pipe(mergeMap((response: ResponseContext) => {
-                let middlewarePostObservable = of(response);
-                for (let middleware of this.configuration.middleware) {
-                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-                }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.health(rsp)));
-            }));
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.health(rsp))
+                    );
+                })
+            );
     }
-
 }
 export class ObservableServiceApi {
     private requestFactory: ServiceApiRequestFactory;
@@ -69,7 +76,7 @@ export class ObservableServiceApi {
 
     /**
      * Start a task to deploy registered service.
-     * @param createRequest 
+     * @param createRequest
      */
     public deploy(createRequest: CreateRequest, _options?: Configuration): Observable<string> {
         const requestContextPromise = this.requestFactory.deploy(createRequest, _options);
@@ -77,22 +84,31 @@ export class ObservableServiceApi {
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
         }
 
-        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-            pipe(mergeMap((response: ResponseContext) => {
-                let middlewarePostObservable = of(response);
-                for (let middleware of this.configuration.middleware) {
-                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-                }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.deploy(rsp)));
-            }));
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.deploy(rsp))
+                    );
+                })
+            );
     }
 
     /**
      * Start a task to destroy the deployed service using id.
-     * @param id 
+     * @param id
      */
     public destroy(id: string, _options?: Configuration): Observable<Response> {
         const requestContextPromise = this.requestFactory.destroy(id, _options);
@@ -100,21 +116,30 @@ export class ObservableServiceApi {
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
         }
 
-        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-            pipe(mergeMap((response: ResponseContext) => {
-                let middlewarePostObservable = of(response);
-                for (let middleware of this.configuration.middleware) {
-                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-                }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.destroy(rsp)));
-            }));
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.destroy(rsp))
+                    );
+                })
+            );
     }
 
     /**
-     * @param id 
+     * @param id
      */
     public openApi(id: string, _options?: Configuration): Observable<string> {
         const requestContextPromise = this.requestFactory.openApi(id, _options);
@@ -122,17 +147,26 @@ export class ObservableServiceApi {
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
         }
 
-        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-            pipe(mergeMap((response: ResponseContext) => {
-                let middlewarePostObservable = of(response);
-                for (let middleware of this.configuration.middleware) {
-                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-                }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.openApi(rsp)));
-            }));
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.openApi(rsp))
+                    );
+                })
+            );
     }
 
     /**
@@ -145,17 +179,26 @@ export class ObservableServiceApi {
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
         }
 
-        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-            pipe(mergeMap((response: ResponseContext) => {
-                let middlewarePostObservable = of(response);
-                for (let middleware of this.configuration.middleware) {
-                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-                }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.serviceDetail(rsp)));
-            }));
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.serviceDetail(rsp))
+                    );
+                })
+            );
     }
 
     /**
@@ -167,19 +210,27 @@ export class ObservableServiceApi {
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
         }
 
-        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-            pipe(mergeMap((response: ResponseContext) => {
-                let middlewarePostObservable = of(response);
-                for (let middleware of this.configuration.middleware) {
-                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-                }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.services(rsp)));
-            }));
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.services(rsp))
+                    );
+                })
+            );
     }
-
 }
 export class ObservableServiceVendorApi {
     private requestFactory: ServiceVendorApiRequestFactory;
@@ -206,17 +257,26 @@ export class ObservableServiceVendorApi {
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
         }
 
-        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-            pipe(mergeMap((response: ResponseContext) => {
-                let middlewarePostObservable = of(response);
-                for (let middleware of this.configuration.middleware) {
-                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-                }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.detail(rsp)));
-            }));
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.detail(rsp))
+                    );
+                })
+            );
     }
 
     /**
@@ -229,17 +289,26 @@ export class ObservableServiceVendorApi {
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
         }
 
-        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-            pipe(mergeMap((response: ResponseContext) => {
-                let middlewarePostObservable = of(response);
-                for (let middleware of this.configuration.middleware) {
-                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-                }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fetch(rsp)));
-            }));
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.fetch(rsp))
+                    );
+                })
+            );
     }
 
     /**
@@ -253,17 +322,26 @@ export class ObservableServiceVendorApi {
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
         }
 
-        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-            pipe(mergeMap((response: ResponseContext) => {
-                let middlewarePostObservable = of(response);
-                for (let middleware of this.configuration.middleware) {
-                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-                }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fetchUpdate(rsp)));
-            }));
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.fetchUpdate(rsp))
+                    );
+                })
+            );
     }
 
     /**
@@ -275,17 +353,26 @@ export class ObservableServiceVendorApi {
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
         }
 
-        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-            pipe(mergeMap((response: ResponseContext) => {
-                let middlewarePostObservable = of(response);
-                for (let middleware of this.configuration.middleware) {
-                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-                }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.listCategories(rsp)));
-            }));
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.listCategories(rsp))
+                    );
+                })
+            );
     }
 
     /**
@@ -295,51 +382,84 @@ export class ObservableServiceVendorApi {
      * @param serviceName name of the service
      * @param serviceVersion version of the service
      */
-    public listRegisteredServices(categoryName?: string, cspName?: string, serviceName?: string, serviceVersion?: string, _options?: Configuration): Observable<Array<RegisterServiceEntity>> {
-        const requestContextPromise = this.requestFactory.listRegisteredServices(categoryName, cspName, serviceName, serviceVersion, _options);
+    public listRegisteredServices(
+        categoryName?: string,
+        cspName?: string,
+        serviceName?: string,
+        serviceVersion?: string,
+        _options?: Configuration
+    ): Observable<Array<RegisterServiceEntity>> {
+        const requestContextPromise = this.requestFactory.listRegisteredServices(
+            categoryName,
+            cspName,
+            serviceName,
+            serviceVersion,
+            _options
+        );
 
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
         }
 
-        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-            pipe(mergeMap((response: ResponseContext) => {
-                let middlewarePostObservable = of(response);
-                for (let middleware of this.configuration.middleware) {
-                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-                }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.listRegisteredServices(rsp)));
-            }));
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.listRegisteredServices(rsp))
+                    );
+                })
+            );
     }
 
     /**
      * List registered service group by serviceName, serviceVersion, cspName with category.
      * @param categoryName category of the service
      */
-    public listRegisteredServicesTree(categoryName: string, _options?: Configuration): Observable<Array<CategoryOclVo>> {
+    public listRegisteredServicesTree(
+        categoryName: string,
+        _options?: Configuration
+    ): Observable<Array<CategoryOclVo>> {
         const requestContextPromise = this.requestFactory.listRegisteredServicesTree(categoryName, _options);
 
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
         }
 
-        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-            pipe(mergeMap((response: ResponseContext) => {
-                let middlewarePostObservable = of(response);
-                for (let middleware of this.configuration.middleware) {
-                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-                }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.listRegisteredServicesTree(rsp)));
-            }));
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.listRegisteredServicesTree(rsp))
+                    );
+                })
+            );
     }
 
     /**
      * Register new service using ocl model.
-     * @param ocl 
+     * @param ocl
      */
     public register(ocl: Ocl, _options?: Configuration): Observable<string> {
         const requestContextPromise = this.requestFactory.register(ocl, _options);
@@ -347,17 +467,26 @@ export class ObservableServiceVendorApi {
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
         }
 
-        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-            pipe(mergeMap((response: ResponseContext) => {
-                let middlewarePostObservable = of(response);
-                for (let middleware of this.configuration.middleware) {
-                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-                }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.register(rsp)));
-            }));
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.register(rsp))
+                    );
+                })
+            );
     }
 
     /**
@@ -370,23 +499,32 @@ export class ObservableServiceVendorApi {
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
         }
 
-        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-            pipe(mergeMap((response: ResponseContext) => {
-                let middlewarePostObservable = of(response);
-                for (let middleware of this.configuration.middleware) {
-                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-                }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.unregister(rsp)));
-            }));
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.unregister(rsp))
+                    );
+                })
+            );
     }
 
     /**
      * Update registered service using id and ocl model.
      * @param id id of registered service
-     * @param ocl 
+     * @param ocl
      */
     public update(id: string, ocl: Ocl, _options?: Configuration): Observable<Response> {
         const requestContextPromise = this.requestFactory.update(id, ocl, _options);
@@ -394,17 +532,25 @@ export class ObservableServiceVendorApi {
         // build promise chain
         let middlewarePreObservable = from<RequestContext>(requestContextPromise);
         for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
         }
 
-        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-            pipe(mergeMap((response: ResponseContext) => {
-                let middlewarePostObservable = of(response);
-                for (let middleware of this.configuration.middleware) {
-                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-                }
-                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.update(rsp)));
-            }));
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.update(rsp))
+                    );
+                })
+            );
     }
-
 }

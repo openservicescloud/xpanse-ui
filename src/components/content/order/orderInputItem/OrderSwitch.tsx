@@ -6,14 +6,13 @@
 import { Form, Switch } from 'antd';
 import { DeployParam, SwitchOnChangeHandler } from './OrderCommon';
 
-export function OrderSwitch(
-    {
-        item,
-        onChangeHandler
-    }: {
-        item: DeployParam;
-        onChangeHandler: SwitchOnChangeHandler;
-    }): JSX.Element {
+export function OrderSwitch({
+    item,
+    onChangeHandler,
+}: {
+    item: DeployParam;
+    onChangeHandler: SwitchOnChangeHandler;
+}): JSX.Element {
     return (
         <div className={'order-param-item-row'}>
             <div className={'order-param-item-left'} />

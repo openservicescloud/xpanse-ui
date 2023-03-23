@@ -9,11 +9,12 @@ import Home from './components/content/home/Home';
 import LoginScreen from './components/content/login/LoginScreen';
 import Protected from './components/protectedRoutes/ProtectedRoute';
 import {
-  catalogPageRoute, createServicePageRoute,
-  homePageRoute,
-  orderPageRoute,
-  registerPageRoute,
-  servicesPageRoute
+    catalogPageRoute,
+    createServicePageRoute,
+    homePageRoute,
+    orderPageRoute,
+    registerPageRoute,
+    servicesPageRoute,
 } from './components/utils/constants';
 import RegisterPanel from './components/content/register/RegisterPanel';
 import Catalog from './components/content/catalog/Catalog';

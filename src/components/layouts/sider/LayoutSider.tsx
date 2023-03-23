@@ -33,17 +33,16 @@ function LayoutSider(): JSX.Element {
                     console.log(error.message);
                     setItems([catalogMenu([]), registerPanelMenu()]);
                 });
-        }else{
+        } else {
             serviceVendorApi
-            .listCategories()
-            .then((rsp) => {
-                setItems([servicesMenu(rsp)]);
-            })
-            .catch((error) => {
-                console.log(error.message);
-                setItems([]);
-            });
-
+                .listCategories()
+                .then((rsp) => {
+                    setItems([servicesMenu(rsp)]);
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    setItems([]);
+                });
         }
     }, []);
 

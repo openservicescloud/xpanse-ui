@@ -77,14 +77,14 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): JSX.Element | string {
                                 <br />
                                 <b>Service Name</b>
                                 <br />
-                                <Tag color="blue">{ocl.name}</Tag>
+                                <Tag color='blue'>{ocl.name}</Tag>
                                 <br />
                                 <br />
                             </div>
                             <div>
                                 <b>Cloud Service Provider</b>
                                 <br />
-                                <Tag color="cyan">{ocl.cloudServiceProvider.name}</Tag>
+                                <Tag color='cyan'>{ocl.cloudServiceProvider.name}</Tag>
                                 <br />
                                 <br />
                             </div>
@@ -92,12 +92,11 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): JSX.Element | string {
                                 <b>Available Regions</b>
                                 <br />
                                 {ocl.cloudServiceProvider.areas.map((area, index) => (
-                                    <Tag color="orange">{area.name}:&nbsp;{area.regions
-                                    ? area.regions.join(', ')
-                                    : PLACE_HOLDER_UNKNOWN_VALUE}</Tag>
-                                ))
-
-                                }
+                                    <Tag color='orange'>
+                                        {area.name}:&nbsp;
+                                        {area.regions ? area.regions.join(', ') : PLACE_HOLDER_UNKNOWN_VALUE}
+                                    </Tag>
+                                ))}
                                 <br />
                                 <br />
                             </div>
