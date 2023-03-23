@@ -17,7 +17,7 @@ import {
     RegisterServiceEntity,
 } from '../../../xpanse-api/generated';
 import { OrderSubmitProps } from './OrderSubmit';
-import { DeployParam } from './VariableElement/OrderCommon';
+import { DeployParam } from './orderInputItem/OrderCommon';
 import Navigate from './Navigate';
 import { Tab } from 'rc-tabs/lib/interface';
 import { HuaWeiLogo, AzureLogo, AlibabaLogo, AWSLogo, XpanseLogo } from './CSPLogo';

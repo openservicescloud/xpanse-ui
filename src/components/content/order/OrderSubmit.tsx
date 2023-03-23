@@ -4,14 +4,13 @@
  */
 
 import Navigate from './Navigate';
-import '../../../styles/order.css';
+import '../../../styles/service_order.css';
 import { To, useLocation } from 'react-router-dom';
-import { HomeOutlined } from '@ant-design/icons';
 import { ChangeEvent, useState } from 'react';
-import { DeployParam, DeployParamItem, ParamOnChangeHandler } from './VariableElement/OrderCommon';
-import { OrderTextInput } from './VariableElement/OrderTextInput';
-import { OrderNumberInput } from './VariableElement/OrderNumberInput';
-import { OrderSwitch } from './VariableElement/OrderSwitch';
+import { DeployParam, DeployParamItem, ParamOnChangeHandler } from './orderInputItem/OrderCommon';
+import { OrderTextInput } from './orderInputItem/OrderTextInput';
+import { OrderNumberInput } from './orderInputItem/OrderNumberInput';
+import { OrderSwitch } from './orderInputItem/OrderSwitch';
 import { Alert, Button, Form, Select } from 'antd';
 import { CreateRequest, CreateRequestCategoryEnum, CreateRequestCspEnum } from '../../../xpanse-api/generated';
 import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';

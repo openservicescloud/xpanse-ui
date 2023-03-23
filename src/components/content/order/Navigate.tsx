@@ -4,7 +4,7 @@
  */
 
 import { useNavigate, To } from 'react-router-dom';
-import '../../../styles/order.css';
+import '../../../styles/service_order.css';
 
 function Navigate({ text, to }: { text: String; to: To }): JSX.Element {
     const navigate = useNavigate();

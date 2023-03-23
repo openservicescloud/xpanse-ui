@@ -16,7 +16,7 @@ import {
     RegisterServiceEntity,
 } from '../../../xpanse-api/generated';
 import { OrderSubmitProps } from './OrderSubmit';
-import { DeployParam } from './VariableElement/OrderCommon';
+import { DeployParam } from './orderInputItem/OrderCommon';
 import Navigate from './Navigate';
 
 function CreateService(): JSX.Element {

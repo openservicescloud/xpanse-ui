@@ -4,7 +4,7 @@
  */
 
 import { FormOutlined } from '@ant-design/icons';
-import '../../../styles/services.css';
+import '../../../styles/service_order.css';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { createServicePageRoute } from '../../utils/constants';
