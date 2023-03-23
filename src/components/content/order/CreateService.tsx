@@ -32,9 +32,11 @@ const defaultLogo: string =
 const huaweiLogo: string =
     'https://user-images.githubusercontent.com/1907997/226822430-07591362-4a62-4d31-8a24-823e4b7c4c45.png';
 const azureLogo: string = 'https://upload.wikimedia.org/wikipedia/commons/a/a8/Microsoft_Azure_Logo.svg';
-const alibabaLogo: string = 'https://img.alicdn.com/tfs/TB13DzOjXP7gK0jSZFjXXc5aXXa-212-48.png';
+const alibabaLogo: string = 'https://user-images.githubusercontent.com/1907997/227094090-4912d61e-264b-4051-89d5-8e4c9a615b2f.png';
+const awsLogo: string = 'https://user-images.githubusercontent.com/1907997/227094301-739e9414-d414-4f48-bc29-1ae56bb8c77a.png';
 
 const cspMap: Map<CloudServiceProviderNameEnum, CSP> = new Map([
+    ['aws', { name: 'Aws', logo: awsLogo }],
     ['huawei', { name: 'Huawei', logo: huaweiLogo }],
     ['azure', { name: 'Azure', logo: azureLogo }],
     ['alibaba', { name: 'Alibaba', logo: alibabaLogo }],
@@ -58,31 +60,43 @@ function CreateService(): JSX.Element {
     const [areaMapper, setAreaMapper] = useState<Map<string, Area[]>>(new Map<string, Area[]>());
 
     const [csp, setCsp] = useState<CSP[]>([]);
+    const [areaActiveKey, setAreaActiveKey] = useState<string>('1');
 
-    const onChangeCloudProvider = (key: string) => {
-        setCloudProviderValue(key.charAt(0).toLowerCase() + key.slice(1));
-    };
-
-    const handleChangeVersion = (value: string) => {
-        setVersionValue(value);
-    };
 
     const [areaValue, setAreaValue] = useState<string>('');
     const [areaList, setAreaList] = useState<Area[]>([]);
     const [items, setItems] = useState<Tab[]>([]);
 
-    const onChangeAreaValue = (key: string) => {
-        setAreaValue(key);
-    };
+
     const [regionValue, setRegionValue] = useState<string>('');
     const [regionOptions, setRegionOptions] = useState<{ value: string; label: string }[]>([{ value: '', label: '' }]);
+
+    const [flavorOptions, setFlavorOptions] = useState<{ value: string; label: string }[]>([]);
+    const [flavorValue, setFlavorValue] = useState<string>('');
+
+
+    const handleChangeFlavor = (value: string) => {
+        setFlavorValue(value);
+    };
+
     const handleChangeRegion = (value: string) => {
         setRegionValue(value);
     };
-    const [flavorOptions, setFlavorOptions] = useState<{ value: string; label: string }[]>([]);
-    const [flavorValue, setFlavorValue] = useState<string>('');
-    const handleChangeFlavor = (value: string) => {
-        setFlavorValue(value);
+
+    const onChangeAreaValue = (key: string) => {
+        setAreaActiveKey(key);
+        setAreaValue(key);
+    };
+
+    const onChangeCloudProvider = (key: string) => {
+        setAreaActiveKey(areaList[0].name);
+        setCloudProviderValue(key.charAt(0).toLowerCase() + key.slice(1));
+
+        console.log("current key " + areaActiveKey)
+    };
+
+    const handleChangeVersion = (value: string) => {
+        setVersionValue(value);
     };
 
     useEffect(() => {
@@ -309,8 +323,9 @@ function CreateService(): JSX.Element {
                     <Tabs
                         type='card'
                         size='middle'
-                        defaultActiveKey={'1'}
+                        // defaultActiveKey={areaActiveKey}
                         tabPosition={'top'}
+                        activeKey={areaActiveKey}
                         items={items}
                         onChange={onChangeAreaValue}
                     />
