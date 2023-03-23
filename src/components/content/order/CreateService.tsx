@@ -20,6 +20,7 @@ import { OrderSubmitProps } from './OrderSubmit';
 import { DeployParam } from './VariableElement/OrderCommon';
 import Navigate from './Navigate';
 import { Tab } from 'rc-tabs/lib/interface';
+import { HuaWeiLogo, AzureLogo, AlibabaLogo, AWSLogo, XpanseLogo } from './CSPLogo';
 
 interface CSP {
     name: string;
@@ -27,22 +28,17 @@ interface CSP {
     logo?: string;
 }
 
-const defaultLogo: string =
-    'https://user-images.githubusercontent.com/1907997/226828054-8d66e3c0-ae2e-451e-8d8f-e414bf7bde9c.png';
-const huaweiLogo: string =
-    'https://user-images.githubusercontent.com/1907997/226822430-07591362-4a62-4d31-8a24-823e4b7c4c45.png';
-const azureLogo: string = 'https://upload.wikimedia.org/wikipedia/commons/a/a8/Microsoft_Azure_Logo.svg';
-const alibabaLogo: string = 'https://img.alicdn.com/tfs/TB13DzOjXP7gK0jSZFjXXc5aXXa-212-48.png';
-
 const cspMap: Map<CloudServiceProviderNameEnum, CSP> = new Map([
-    ['huawei', { name: 'Huawei', logo: huaweiLogo }],
-    ['azure', { name: 'Azure', logo: azureLogo }],
-    ['alibaba', { name: 'Alibaba', logo: alibabaLogo }],
-    ['openstack', { name: 'Openstack', logo: defaultLogo }],
+    ['huawei', { name: 'Huawei', logo: HuaWeiLogo }],
+    ['azure', { name: 'Azure', logo: AzureLogo }],
+    ['alibaba', { name: 'Alibaba', logo: AlibabaLogo }],
+    ['openstack', { name: 'Openstack', logo: XpanseLogo }],
+    ['aws', { name: 'aws', logo: AWSLogo }],
 ]);
 
 function CreateService(): JSX.Element {
     const navigate = useNavigate();
+    const location = useLocation();
     const [versionOptions, setVersionOptions] = useState<{ value: string; label: string }[]>([]);
     const [versionValue, setVersionValue] = useState<string>('');
     const [serviceName, setServiceName] = useState<string>('');
@@ -51,13 +47,18 @@ function CreateService(): JSX.Element {
     const [versionMapper, setVersionMapper] = useState<Map<string, RegisterServiceEntity[]>>(
         new Map<string, RegisterServiceEntity[]>()
     );
-    const location = useLocation();
-
     const [cloudProviderValue, setCloudProviderValue] = useState<string>('');
     const [flavorMapper, setFlavorMapper] = useState<Map<string, Flavor[]>>(new Map<string, Flavor[]>());
     const [areaMapper, setAreaMapper] = useState<Map<string, Area[]>>(new Map<string, Area[]>());
-
     const [csp, setCsp] = useState<CSP[]>([]);
+    const [activeKey, setActiveKey] = useState<string>('');
+    const [areaValue, setAreaValue] = useState<string>('');
+    const [areaList, setAreaList] = useState<Area[]>([]);
+    const [items, setItems] = useState<Tab[]>([]);
+    const [regionValue, setRegionValue] = useState<string>('');
+    const [regionOptions, setRegionOptions] = useState<{ value: string; label: string }[]>([{ value: '', label: '' }]);
+    const [flavorOptions, setFlavorOptions] = useState<{ value: string; label: string }[]>([]);
+    const [flavorValue, setFlavorValue] = useState<string>('');
 
     const onChangeCloudProvider = (key: string) => {
         setCloudProviderValue(key.charAt(0).toLowerCase() + key.slice(1));
@@ -67,20 +68,15 @@ function CreateService(): JSX.Element {
         setVersionValue(value);
     };
 
-    const [areaValue, setAreaValue] = useState<string>('');
-    const [areaList, setAreaList] = useState<Area[]>([]);
-    const [items, setItems] = useState<Tab[]>([]);
-
     const onChangeAreaValue = (key: string) => {
+        setActiveKey(key);
         setAreaValue(key);
     };
-    const [regionValue, setRegionValue] = useState<string>('');
-    const [regionOptions, setRegionOptions] = useState<{ value: string; label: string }[]>([{ value: '', label: '' }]);
+
     const handleChangeRegion = (value: string) => {
         setRegionValue(value);
     };
-    const [flavorOptions, setFlavorOptions] = useState<{ value: string; label: string }[]>([]);
-    const [flavorValue, setFlavorValue] = useState<string>('');
+
     const handleChangeFlavor = (value: string) => {
         setFlavorValue(value);
     };
@@ -175,14 +171,14 @@ function CreateService(): JSX.Element {
                 });
                 setVersionOptions(versions);
                 setVersionValue(versions[0].value);
-                updateArea(versions[0].value, result)
+                updateArea(versions[0].value, result);
             } else {
                 return;
             }
         });
     }, [location]);
 
-    function updateArea(version:string, mapper:Map<string, RegisterServiceEntity[]>) : void {
+    function updateArea(version: string, mapper: Map<string, RegisterServiceEntity[]>): void {
         let oclList: Ocl[] = [];
         const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
         mapper.forEach((v, k) => {
@@ -251,6 +247,7 @@ function CreateService(): JSX.Element {
 
             setItems(areaItems);
             setAreaValue(areaList[0].name);
+            setActiveKey(areaItems[0].key);
         } else {
             return;
         }
@@ -309,7 +306,7 @@ function CreateService(): JSX.Element {
                     <Tabs
                         type='card'
                         size='middle'
-                        defaultActiveKey={'1'}
+                        activeKey={activeKey}
                         tabPosition={'top'}
                         items={items}
                         onChange={onChangeAreaValue}
