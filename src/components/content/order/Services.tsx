@@ -12,12 +12,10 @@ import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 
 function Services(): JSX.Element {
     const [services, setServices] = useState<{ name: string; content: string; icon: string }[]>([]);
-    const [isSelected, setIsSelected] = useState<number>();
     const navigate = useNavigate();
     const location = useLocation();
 
     const onClicked = function (cfg: string) {
-        console.log('cfg: ', cfg);
         navigate(
             createServicePageRoute
                 .concat('?serviceName=', location.hash.split('#')[1])
@@ -31,9 +29,8 @@ function Services(): JSX.Element {
             return;
         }
         serviceVendorApi.listRegisteredServicesTree(categoryName).then((rsp) => {
-            if(rsp.length > 0){
-                console.log('rsp from Services: ', rsp);
-                let serviceList: { name: string; content: string; icon:string }[] = [];
+            if (rsp.length > 0) {
+                let serviceList: { name: string; content: string; icon: string }[] = [];
                 rsp.forEach((item) => {
                     let serviceItem = {
                         name: item.name || '',
@@ -43,10 +40,9 @@ function Services(): JSX.Element {
                     serviceList.push(serviceItem);
                 });
                 setServices(serviceList);
-            }else{
-                return(<></>)
+            } else {
+                return;
             }
-
         });
     }, [location]);
 
@@ -59,13 +55,9 @@ function Services(): JSX.Element {
             <div className={'services-content-body'}>
                 {services.map((item, index) => {
                     return (
-                        <div
-                            key={index}
-                            className={'service-type-option-detail'}
-                            onClick={(e) => onClicked(item.name)}
-                        >
+                        <div key={index} className={'service-type-option-detail'} onClick={(e) => onClicked(item.name)}>
                             <div className='service-type-option-image'>
-                                <img className='service-type-option-service-icon' src={item.icon} alt={'App'}/>
+                                <img className='service-type-option-service-icon' src={item.icon} alt={'App'} />
                             </div>
                             <div className='service-type-option-info'>
                                 <span className='service-type-option'>{item.name}</span>
