@@ -1,28 +1,12 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- * SPDX-FileCopyrightText: Huawei Inc.
- */
+import { ResponseContext, RequestContext, HttpFile } from '../http/http';
+import { Configuration} from '../configuration'
 
-import { Configuration } from '../configuration';
-import { CategoryOclVo } from '../models/CategoryOclVo';
-import { CreateRequest } from '../models/CreateRequest';
-import { DeployServiceEntity } from '../models/DeployServiceEntity';
-import { Ocl } from '../models/Ocl';
-import { RegisterServiceEntity } from '../models/RegisterServiceEntity';
-import { Response } from '../models/Response';
-import { ServiceVo } from '../models/ServiceVo';
-import { SystemStatus } from '../models/SystemStatus';
-import { ObservableAdminApi, ObservableServiceApi, ObservableServiceVendorApi } from './ObservableAPI';
 
-import { AdminApiRequestFactory, AdminApiResponseProcessor } from '../apis/AdminApi';
+import { ObservableAdminApi, ObservableServiceVendorApi } from './ObservableAPI';
 
-import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
-
-import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
-import { OclDetailVo } from '../models/OclDetailVo';
-
+import { AdminApiRequestFactory, AdminApiResponseProcessor} from "../apis/AdminApi";
 export class PromiseAdminApi {
-    private api: ObservableAdminApi;
+    private api: ObservableAdminApi
 
     public constructor(
         configuration: Configuration,
@@ -38,10 +22,26 @@ export class PromiseAdminApi {
         const result = this.api.health(_options);
         return result.toPromise();
     }
+
+
 }
 
+
+
+import { ObservableServiceApi } from './ObservableAPI';
+
+import { ServiceApiRequestFactory, ServiceApiResponseProcessor} from "../apis/ServiceApi";
+import { SystemStatus } from '../models/SystemStatus';
+import { CreateRequest } from '../models/CreateRequest';
+import { DeployServiceEntity } from '../models/DeployServiceEntity';
+import { ServiceVo } from '../models/ServiceVo';
+import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
+import { OclDetailVo } from '../models/OclDetailVo';
+import { RegisterServiceEntity } from '../models/RegisterServiceEntity';
+import { CategoryOclVo } from '../models/CategoryOclVo';
+import { Ocl } from '../models/Ocl';
 export class PromiseServiceApi {
-    private api: ObservableServiceApi;
+    private api: ObservableServiceApi
 
     public constructor(
         configuration: Configuration,
@@ -52,7 +52,34 @@ export class PromiseServiceApi {
     }
 
     /**
-     * @param id
+     * Start a task to deploy registered service.
+     * @param createRequest 
+     */
+    public deploy(createRequest: CreateRequest, _options?: Configuration): Promise<string> {
+        const result = this.api.deploy(createRequest, _options);
+        return result.toPromise();
+    }
+
+    /**
+     * Start a task to destroy the deployed service using id.
+     * @param id 
+     */
+    public destroy(id: string, _options?: Configuration): Promise<Response> {
+        const result = this.api.destroy(id, _options);
+        return result.toPromise();
+    }
+
+    /**
+     * @param id 
+     */
+    public openApi(id: string, _options?: Configuration): Promise<string> {
+        const result = this.api.openApi(id, _options);
+        return result.toPromise();
+    }
+
+    /**
+     * Get deployed service using id.
+     * @param id Task id of deploy service
      */
     public serviceDetail(id: string, _options?: Configuration): Promise<DeployServiceEntity> {
         const result = this.api.serviceDetail(id, _options);
@@ -60,31 +87,17 @@ export class PromiseServiceApi {
     }
 
     /**
+     * List the deployed services.
      */
     public services(_options?: Configuration): Promise<Array<ServiceVo>> {
         const result = this.api.services(_options);
         return result.toPromise();
     }
 
-    /**
-     * @param createRequest
-     */
-    public start(createRequest: CreateRequest, _options?: Configuration): Promise<string> {
-        const result = this.api.start(createRequest, _options);
-        return result.toPromise();
-    }
 
-    /**
-     * @param id
-     */
-    public stop(id: string, _options?: Configuration): Promise<Response> {
-        const result = this.api.stop(id, _options);
-        return result.toPromise();
-    }
 }
-
 export class PromiseServiceVendorApi {
-    private api: ObservableServiceVendorApi;
+    private api: ObservableServiceVendorApi
 
     public constructor(
         configuration: Configuration,
@@ -137,13 +150,7 @@ export class PromiseServiceVendorApi {
      * @param serviceName name of the service
      * @param serviceVersion version of the service
      */
-    public listRegisteredServices(
-        categoryName?: string,
-        cspName?: string,
-        serviceName?: string,
-        serviceVersion?: string,
-        _options?: Configuration
-    ): Promise<Array<RegisterServiceEntity>> {
+    public listRegisteredServices(categoryName?: string, cspName?: string, serviceName?: string, serviceVersion?: string, _options?: Configuration): Promise<Array<RegisterServiceEntity>> {
         const result = this.api.listRegisteredServices(categoryName, cspName, serviceName, serviceVersion, _options);
         return result.toPromise();
     }
@@ -159,7 +166,7 @@ export class PromiseServiceVendorApi {
 
     /**
      * Register new service using ocl model.
-     * @param ocl
+     * @param ocl 
      */
     public register(ocl: Ocl, _options?: Configuration): Promise<string> {
         const result = this.api.register(ocl, _options);
@@ -178,10 +185,15 @@ export class PromiseServiceVendorApi {
     /**
      * Update registered service using id and ocl model.
      * @param id id of registered service
-     * @param ocl
+     * @param ocl 
      */
     public update(id: string, ocl: Ocl, _options?: Configuration): Promise<Response> {
         const result = this.api.update(id, ocl, _options);
         return result.toPromise();
     }
+
+
 }
+
+
+

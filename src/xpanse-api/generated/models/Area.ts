@@ -12,44 +12,37 @@
 
 import { HttpFile } from '../http/http';
 
-export class Response {
+/**
+* The area of the regions
+*/
+export class Area {
     /**
-    * The result code of response.
+    * The name of the area
     */
-    'code': string;
+    'name': string;
     /**
-    * The result message of response.
+    * The regions of the area
     */
-    'message': string;
-    /**
-    * The success boolean of response.
-    */
-    'success': boolean;
+    'regions': Array<string>;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "code",
-            "baseName": "code",
+            "name": "name",
+            "baseName": "name",
             "type": "string",
             "format": ""
         },
         {
-            "name": "message",
-            "baseName": "message",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "success",
-            "baseName": "success",
-            "type": "boolean",
+            "name": "regions",
+            "baseName": "regions",
+            "type": "Array<string>",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return Response.attributeTypeMap;
+        return Area.attributeTypeMap;
     }
 
     public constructor() {
