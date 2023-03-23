@@ -77,7 +77,7 @@ function CreateService(): JSX.Element {
 
     const onChangeCloudProvider = (key: string, index:number) => {
         setCloudProviderValue(key.charAt(0).toLowerCase() + key.slice(1));
-        setIsSelected(-1);
+        setIsSelected(index);
     };
 
     const handleChangeVersion = (value: string) => {
