@@ -60,6 +60,7 @@ function CreateService(): JSX.Element {
     const [regionOptions, setRegionOptions] = useState<{ value: string; label: string }[]>([{ value: '', label: '' }]);
     const [flavorOptions, setFlavorOptions] = useState<{ value: string; label: string }[]>([]);
     const [flavorValue, setFlavorValue] = useState<string>('');
+    const [isSelected, setIsSelected] = useState<number>();
 
     const onChangeAreaValue = (key: string) => {
         setActiveKey(key);
@@ -74,8 +75,9 @@ function CreateService(): JSX.Element {
         setRegionValue(value);
     };
 
-    const onChangeCloudProvider = (key: string) => {
+    const onChangeCloudProvider = (key: string, index:number) => {
         setCloudProviderValue(key.charAt(0).toLowerCase() + key.slice(1));
+        setIsSelected(-1);
     };
 
     const handleChangeVersion = (value: string) => {
@@ -219,6 +221,7 @@ function CreateService(): JSX.Element {
                             logo: cspMap.get(item.cloudServiceProvider.name)?.logo,
                         });
                         setService(item);
+                        setIsSelected(oclList.indexOf(item));
                     }
                 }
             });
@@ -293,11 +296,14 @@ function CreateService(): JSX.Element {
                         return (
                             <div
                                 onClick={(e) => {
-                                    onChangeCloudProvider(item.name);
+                                    onChangeCloudProvider(item.name,index);
                                 }}
                                 key={index}
+                                className={isSelected === index
+                                    ? 'cloud-provider-select-hover'
+                                    : 'cloud-provider-select'}
                             >
-                                <img className='cloud-provider-select' src={item.logo} alt={item.name} />
+                                <img  src={item.logo} alt={item.name} />
                                 <div className='service-type-option-info' />
                             </div>
                         );
