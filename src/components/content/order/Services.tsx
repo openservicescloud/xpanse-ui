@@ -11,7 +11,7 @@ import { createServicePageRoute } from '../../utils/constants';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 
 function Services(): JSX.Element {
-    const [services, setServices] = useState<{ name: string; content: string }[]>([]);
+    const [services, setServices] = useState<{ name: string; content: string; icon: string }[]>([]);
     const [isSelected, setIsSelected] = useState<number>();
     const navigate = useNavigate();
     const location = useLocation();
@@ -33,12 +33,12 @@ function Services(): JSX.Element {
         serviceVendorApi.listRegisteredServicesTree(categoryName).then((rsp) => {
             if(rsp.length > 0){
                 console.log('rsp from Services: ', rsp);
-                let serviceList: { name: string; content: string }[] = [];
+                let serviceList: { name: string; content: string; icon:string }[] = [];
                 rsp.forEach((item) => {
                     let serviceItem = {
                         name: item.name || '',
                         content: item.versions[0].cloudProvider[0].details[0].description,
-                        // icon: item.versions[0].cloudProvider[0].details[0].icon,
+                        icon: item.versions[0].cloudProvider[0].details[0].icon,
                     };
                     serviceList.push(serviceItem);
                 });
@@ -65,7 +65,7 @@ function Services(): JSX.Element {
                             onClick={(e) => onClicked(item.name)}
                         >
                             <div className='service-type-option-image'>
-                                <img className='service-type-option-service-icon'/>
+                                <img className='service-type-option-service-icon' src={item.icon} alt={'App'}/>
                             </div>
                             <div className='service-type-option-info'>
                                 <span className='service-type-option'>{item.name}</span>

@@ -175,18 +175,18 @@ function CreateService(): JSX.Element {
                 });
                 setVersionOptions(versions);
                 setVersionValue(versions[0].value);
+                updateArea(versions[0].value, result)
             } else {
                 return;
             }
         });
     }, [location]);
 
-    useEffect(() => {
+    function updateArea(version:string, mapper:Map<string, RegisterServiceEntity[]>) : void {
         let oclList: Ocl[] = [];
-        const flavorMapper: Map<string, Flavor[]> = new Map<string, Flavor[]>();
         const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
-        versionMapper.forEach((v, k) => {
-            if (k === versionValue) {
+        mapper.forEach((v, k) => {
+            if (k === version) {
                 let ocls: Ocl[] = [];
                 v.map((registerServiceEntity) => {
                     if (registerServiceEntity.ocl instanceof Ocl) {
@@ -197,7 +197,7 @@ function CreateService(): JSX.Element {
             }
         });
         oclList
-            .filter((v) => (v as Ocl).serviceVersion === versionValue)
+            .filter((v) => (v as Ocl).serviceVersion === version)
             .flatMap((v) => {
                 if (!v || !v.cloudServiceProvider) {
                     return { key: '', label: '' };
@@ -208,7 +208,6 @@ function CreateService(): JSX.Element {
                 areaMapper.set(v.cloudServiceProvider.name || '', v.cloudServiceProvider.areas || []);
                 flavorMapper.set(v.serviceVersion || '', v.flavors || []);
                 setCloudProviderValue(v.cloudServiceProvider.name);
-                const name = v.cloudServiceProvider.name;
             });
         setAreaMapper(areaMapper);
         setFlavorMapper(flavorMapper);
@@ -216,7 +215,7 @@ function CreateService(): JSX.Element {
         let cspItems: CSP[] = [];
         if (oclList.length > 0) {
             oclList.forEach((item) => {
-                if (item.serviceVersion === versionValue) {
+                if (item.serviceVersion === version) {
                     if (item && item.cloudServiceProvider) {
                         cspItems.push({
                             name: cspMap.get(item.cloudServiceProvider.name)?.name as string,
@@ -227,10 +226,11 @@ function CreateService(): JSX.Element {
                 }
             });
             setCsp(cspItems);
-            setCloudProviderValue(cspItems[0].name);
-        } else {
-            return;
         }
+    }
+
+    useEffect(() => {
+        updateArea(versionValue, versionMapper);
     }, [versionValue, versionMapper]);
 
     useEffect(() => {
