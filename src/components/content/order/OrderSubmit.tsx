@@ -11,7 +11,7 @@ import { DeployParam, DeployParamItem, ParamOnChangeHandler } from './orderInput
 import { OrderTextInput } from './orderInputItem/OrderTextInput';
 import { OrderNumberInput } from './orderInputItem/OrderNumberInput';
 import { OrderSwitch } from './orderInputItem/OrderSwitch';
-import { Alert, Button, Form, Select } from 'antd';
+import { Alert, Button, Form } from 'antd';
 import { CreateRequest, CreateRequestCategoryEnum, CreateRequestCspEnum } from '../../../xpanse-api/generated';
 import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';
 
@@ -198,7 +198,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             >
                 <div className={deploying ? 'deploying order-param-item-row' : ''}>
                     {parameters.map((item) => (
-                        item.kind === 'variable' || item.kind === 'env'?
+                        item.kind === 'variable' || item.kind === 'env' ?
                             <OrderItem key={item.name} item={item} onChangeHandler={GetOnChangeHandler(item)} /> : <></>
                     ))}
                 </div>
@@ -222,102 +222,4 @@ export function OrderSubmitPage(): JSX.Element {
     return OrderSubmit(props);
 }
 
-export function DefaultOrderExtendParamsBak(): JSX.Element {
-    return OrderSubmit({
-        // The category of the service
-        category: 'middleware',
-        // The name of the service
-        name: 'kubernetes',
-        // The version of service
-        version: 'v1.2',
-        // The region of the provider.
-        region: 'cn-north-4',
-        // The csp of the Service.
-        csp: 'huawei',
-        // The flavor of the Service.
-        flavor: '3-node-without-zookeeper',
-        params: [
-            {
-                name: 'secgroupe_id',
-                kind: 'variable',
-                type: 'string',
-                example: '43190ab2-c3d9-11ed-9f75-4b91f01c7f34',
-                description: 'The uuid of the security group',
-                value: '',
-                mandatory: true,
-                validator: 'string'
-            },
-            {
-                name: 'gateway_id',
-                kind: 'variable',
-                type: 'number',
-                example: '6766367e-c3d9-11ed-a09c-fbf1a38147fb',
-                description: 'The uuid of the VPC',
-                value: '',
-                mandatory: false,
-                validator: 'string'
-            },
-            {
-                name: 'vpd_id',
-                kind: 'variable',
-                type: 'string',
-                example: '6766367e-c3d9-11ed-a09c-fbf1a38147fb',
-                description: 'The uuid of the VPC',
-                value: '',
-                mandatory: false,
-                validator: 'string'
-            },
-            {
-                name: 'gateway_id2',
-                kind: 'variable',
-                type: 'number',
-                example: '6766367e-c3d9-11ed-a09c-fbf1a38147fb',
-                description: 'The uuid of the VPC',
-                value: '',
-                mandatory: true,
-                validator: 'string'
-            },
-            {
-                name: 'gateway_boolean',
-                kind: 'variable',
-                type: 'boolean',
-                example: '6766367e-c3d9-11ed-a09c-fbf1a38147fb',
-                description: 'The uuid of the VPC',
-                value: '',
-                mandatory: true,
-                validator: 'string'
-            }
-        ]
-    });
-}
-
-export function DefaultOrderExtendParams(): JSX.Element {
-    return OrderSubmit({
-        // The category of the service
-        category: 'middleware',
-        // The name of the service
-        name: 'kubernetes',
-        // The version of service
-        version: 'v1.2',
-        // The region of the provider.
-        region: 'cn-north-4',
-        // The csp of the Service.
-        csp: 'huawei',
-        // The flavor of the Service.
-        flavor: '3-node-without-zookeeper',
-        params: [
-            {
-                name: 'secgroup_id',
-                kind: 'variable',
-                type: 'string',
-                example: '43190ab2-c3d9-11ed-9f75-4b91f01c7f34',
-                description: 'The uuid of the security group',
-                value: '',
-                mandatory: true,
-                validator: 'string'
-            }
-        ]
-    });
-}
-
-export default OrderSubmit;
+export default OrderSubmitPage;

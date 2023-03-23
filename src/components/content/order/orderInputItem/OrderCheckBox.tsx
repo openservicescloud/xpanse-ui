@@ -6,13 +6,14 @@
 import { Checkbox, Form } from 'antd';
 import { CheckBoxOnChangeHandler, DeployParam } from './OrderCommon';
 
-export function OrderCheckBox({
-    item,
-    onChangeHandler,
-}: {
-    item: DeployParam;
-    onChangeHandler: CheckBoxOnChangeHandler;
-}): JSX.Element {
+export function OrderCheckBox(
+    {
+        item,
+        onChangeHandler
+    }: {
+        item: DeployParam;
+        onChangeHandler: CheckBoxOnChangeHandler;
+    }): JSX.Element {
     return (
         <div className={'order-param-item-row'}>
             <div className={'order-param-item-left'} />

@@ -19,7 +19,7 @@ import RegisterPanel from './components/content/register/RegisterPanel';
 import Catalog from './components/content/catalog/Catalog';
 import Services from './components/content/order/Services';
 import CreateService from './components/content/order/CreateService';
-import { OrderSubmitPage } from './components/content/order/OrderSubmit';
+import OrderSubmitPage from './components/content/order/OrderSubmit';
 
 function App(): JSX.Element {
     return (

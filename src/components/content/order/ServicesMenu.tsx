@@ -9,8 +9,8 @@ import { servicesLabelName, servicesPageRoute, servicesSubPageRoute } from '../.
 
 export const servicesMenu = (data: string[]): ItemType => {
     const subMenuItems = data.map((subMenu: string) => {
-        let subMenuLabelStr: string = '';
-        subMenuLabelStr = subMenu.charAt(0).toUpperCase() + subMenu.substring(1, subMenu.length).replace('_', '');
+        let subMenuLabelStr: string =
+            subMenu.charAt(0).toUpperCase() + subMenu.substring(1, subMenu.length).replace('_', '');
         return {
             key: servicesSubPageRoute + subMenu,
             label: subMenuLabelStr,
