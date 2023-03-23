@@ -153,7 +153,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         createRequest.flavor = props.flavor;
         createRequest.property = {};
         for (let item of parameters) {
-            if (item.kind === 'variable') {
+            if (item.kind === 'variable' || item.kind === 'env') {
                 createRequest.property[item.name] = item.value as string;
             }
         }
@@ -199,7 +199,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             >
                 <div className={deploying ? 'deploying order-param-item-row' : ''}>
                     {parameters.map((item) => (
-                        item.kind === 'variable' ?
+                        item.kind === 'variable' || item.kind === 'env'?
                             <OrderItem key={item.name} item={item} onChangeHandler={GetOnChangeHandler(item)} /> : <></>
                     ))}
                 </div>
