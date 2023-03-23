@@ -34,12 +34,12 @@ const cspMap: Map<CloudServiceProviderNameEnum, CSP> = new Map([
     ['alibaba', { name: 'Alibaba', logo: AlibabaLogo }],
     ['openstack', { name: 'Openstack', logo: XpanseLogo }],
     ['aws', { name: 'aws', logo: AWSLogo }],
-
 ]);
 
 function CreateService(): JSX.Element {
     const navigate = useNavigate();
     const location = useLocation();
+    //select version
     const [versionOptions, setVersionOptions] = useState<{ value: string; label: string }[]>([]);
     const [versionValue, setVersionValue] = useState<string>('');
     const [serviceName, setServiceName] = useState<string>('');
@@ -48,66 +48,42 @@ function CreateService(): JSX.Element {
     const [versionMapper, setVersionMapper] = useState<Map<string, RegisterServiceEntity[]>>(
         new Map<string, RegisterServiceEntity[]>()
     );
+    //select cloudProvider
     const [cloudProviderValue, setCloudProviderValue] = useState<string>('');
-    const [flavorMapper, setFlavorMapper] = useState<Map<string, Flavor[]>>(new Map<string, Flavor[]>());
-    const [areaMapper, setAreaMapper] = useState<Map<string, Area[]>>(new Map<string, Area[]>());
     const [csp, setCsp] = useState<CSP[]>([]);
+    const [isSelected, setIsSelected] = useState<number>();
+    //select flavor
+    const [flavorMapper, setFlavorMapper] = useState<Map<string, Flavor[]>>(new Map<string, Flavor[]>());
+    const [flavorOptions, setFlavorOptions] = useState<{ value: string; label: string }[]>([]);
+    const [flavorValue, setFlavorValue] = useState<string>('');
+    //select area
+    const [areaMapper, setAreaMapper] = useState<Map<string, Area[]>>(new Map<string, Area[]>());
     const [activeKey, setActiveKey] = useState<string>('');
     const [areaValue, setAreaValue] = useState<string>('');
     const [areaList, setAreaList] = useState<Area[]>([]);
     const [items, setItems] = useState<Tab[]>([]);
+    //select region
     const [regionValue, setRegionValue] = useState<string>('');
     const [regionOptions, setRegionOptions] = useState<{ value: string; label: string }[]>([{ value: '', label: '' }]);
-    const [flavorOptions, setFlavorOptions] = useState<{ value: string; label: string }[]>([]);
-    const [flavorValue, setFlavorValue] = useState<string>('');
-    const [isSelected, setIsSelected] = useState<number>();
+
+    const handleChangeVersion = (value: string) => {
+        setVersionValue(value);
+    };
+    const onChangeCloudProvider = (key: string, index: number) => {
+        setCloudProviderValue(key.charAt(0).toLowerCase() + key.slice(1));
+        setIsSelected(index);
+    };
+    const handleChangeFlavor = (value: string) => {
+        setFlavorValue(value);
+    };
 
     const onChangeAreaValue = (key: string) => {
         setActiveKey(key);
         setAreaValue(key);
     };
-
-    const handleChangeFlavor = (value: string) => {
-        setFlavorValue(value);
-    };
-
     const handleChangeRegion = (value: string) => {
         setRegionValue(value);
     };
-
-    const onChangeCloudProvider = (key: string, index:number) => {
-        setCloudProviderValue(key.charAt(0).toLowerCase() + key.slice(1));
-        setIsSelected(index);
-    };
-
-    const handleChangeVersion = (value: string) => {
-        setVersionValue(value);
-    };
-
-    useEffect(() => {
-        if (areaList.length > 0) {
-            const regions: { value: string; label: string }[] = areaList
-                .filter((v) => (v as Area).name === areaValue)
-                .flatMap((v) => {
-                    if (!v || !v.regions) {
-                        return { value: '', label: '' };
-                    }
-                    return v.regions.map((region) => {
-                        if (!region) {
-                            return { value: '', label: '' };
-                        }
-                        return {
-                            value: region,
-                            label: region,
-                        };
-                    });
-                });
-            setRegionOptions(regions);
-            setRegionValue(regions[0].value);
-        } else {
-            return;
-        }
-    }, [areaValue, areaList]);
 
     function group(list: any[], key: string): Map<string, any[]> {
         let map: Map<string, any[]> = new Map<string, any[]>();
@@ -122,39 +98,7 @@ function CreateService(): JSX.Element {
         return map;
     }
 
-    const gotoOrderSubmit = function () {
-        let props: OrderSubmitProps = {
-            category: categoryName as CreateRequestCategoryEnum,
-            name: serviceName,
-            version: versionValue,
-            region: regionValue,
-            csp: cloudProviderValue as CreateRequestCspEnum,
-            flavor: flavorValue,
-            params: new Array<DeployParam>(),
-        };
-
-        if (service !== undefined && service?.deployment.context !== undefined) {
-            for (let param of service?.deployment.context) {
-                props.params.push({
-                    name: param.name,
-                    kind: param.kind,
-                    type: param.type,
-                    example: param.example === undefined ? '' : param.example,
-                    description: param.description,
-                    value: param.value === undefined ? '' : param.value,
-                    mandatory: param.mandatory,
-                    validator: param.validator === undefined ? '' : param.validator,
-                });
-            }
-        }
-
-        navigate('/order', {
-            state: {
-                props: props,
-            },
-        });
-    };
-
+    //set version
     useEffect(() => {
         const categoryName = location.search.split('?')[1].split('&')[0].split('=')[1];
         const serviceName = location.search.split('?')[1].split('&')[1].split('=')[1];
@@ -181,6 +125,7 @@ function CreateService(): JSX.Element {
         });
     }, [location]);
 
+    //set csp
     function updateArea(version: string, mapper: Map<string, RegisterServiceEntity[]>): void {
         let oclList: Ocl[] = [];
         const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
@@ -233,6 +178,7 @@ function CreateService(): JSX.Element {
         updateArea(versionValue, versionMapper);
     }, [versionValue, versionMapper]);
 
+    //set area
     useEffect(() => {
         const areaList: Area[] = areaMapper.get(cloudProviderValue) || [];
         setAreaList(areaList);
@@ -257,6 +203,33 @@ function CreateService(): JSX.Element {
         }
     }, [cloudProviderValue, areaMapper]);
 
+    //set region
+    useEffect(() => {
+        if (areaList.length > 0) {
+            const regions: { value: string; label: string }[] = areaList
+                .filter((v) => (v as Area).name === areaValue)
+                .flatMap((v) => {
+                    if (!v || !v.regions) {
+                        return { value: '', label: '' };
+                    }
+                    return v.regions.map((region) => {
+                        if (!region) {
+                            return { value: '', label: '' };
+                        }
+                        return {
+                            value: region,
+                            label: region,
+                        };
+                    });
+                });
+            setRegionOptions(regions);
+            setRegionValue(regions[0].value);
+        } else {
+            return;
+        }
+    }, [areaValue, areaList]);
+
+    //set flavor
     useEffect(() => {
         const flavorList: Flavor[] = flavorMapper.get(versionValue) || [];
         let flavors: { value: string; label: string }[] = [];
@@ -272,6 +245,39 @@ function CreateService(): JSX.Element {
             return;
         }
     }, [versionValue, flavorMapper]);
+
+    const gotoOrderSubmit = function () {
+        let props: OrderSubmitProps = {
+            category: categoryName as CreateRequestCategoryEnum,
+            name: serviceName,
+            version: versionValue,
+            region: regionValue,
+            csp: cloudProviderValue as CreateRequestCspEnum,
+            flavor: flavorValue,
+            params: new Array<DeployParam>(),
+        };
+
+        if (service !== undefined && service?.deployment.context !== undefined) {
+            for (let param of service?.deployment.context) {
+                props.params.push({
+                    name: param.name,
+                    kind: param.kind,
+                    type: param.type,
+                    example: param.example === undefined ? '' : param.example,
+                    description: param.description,
+                    value: param.value === undefined ? '' : param.value,
+                    mandatory: param.mandatory,
+                    validator: param.validator === undefined ? '' : param.validator,
+                });
+            }
+        }
+
+        navigate('/order', {
+            state: {
+                props: props,
+            },
+        });
+    };
 
     return (
         <>
@@ -295,15 +301,15 @@ function CreateService(): JSX.Element {
                     {csp.map((item, index) => {
                         return (
                             <div
-                                onClick={(e) => {
-                                    onChangeCloudProvider(item.name,index);
+                                onClick={() => {
+                                    onChangeCloudProvider(item.name, index);
                                 }}
                                 key={index}
-                                className={isSelected === index
-                                    ? 'cloud-provider-select-hover'
-                                    : 'cloud-provider-select'}
+                                className={
+                                    isSelected === index ? 'cloud-provider-select-hover' : 'cloud-provider-select'
+                                }
                             >
-                                <img  src={item.logo} alt={item.name} />
+                                <img src={item.logo} alt={item.name} />
                                 <div className='service-type-option-info' />
                             </div>
                         );
