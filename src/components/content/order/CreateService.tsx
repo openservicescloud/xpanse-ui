@@ -34,6 +34,7 @@ const cspMap: Map<CloudServiceProviderNameEnum, CSP> = new Map([
     ['alibaba', { name: 'Alibaba', logo: AlibabaLogo }],
     ['openstack', { name: 'Openstack', logo: XpanseLogo }],
     ['aws', { name: 'aws', logo: AWSLogo }],
+
 ]);
 
 function CreateService(): JSX.Element {
@@ -60,25 +61,25 @@ function CreateService(): JSX.Element {
     const [flavorOptions, setFlavorOptions] = useState<{ value: string; label: string }[]>([]);
     const [flavorValue, setFlavorValue] = useState<string>('');
 
-    const onChangeCloudProvider = (key: string) => {
-        setCloudProviderValue(key.charAt(0).toLowerCase() + key.slice(1));
-    };
-
-    const handleChangeVersion = (value: string) => {
-        setVersionValue(value);
-    };
-
     const onChangeAreaValue = (key: string) => {
         setActiveKey(key);
         setAreaValue(key);
+    };
+
+    const handleChangeFlavor = (value: string) => {
+        setFlavorValue(value);
     };
 
     const handleChangeRegion = (value: string) => {
         setRegionValue(value);
     };
 
-    const handleChangeFlavor = (value: string) => {
-        setFlavorValue(value);
+    const onChangeCloudProvider = (key: string) => {
+        setCloudProviderValue(key.charAt(0).toLowerCase() + key.slice(1));
+    };
+
+    const handleChangeVersion = (value: string) => {
+        setVersionValue(value);
     };
 
     useEffect(() => {

@@ -195,6 +195,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 autoComplete='off'
                 onFinish={OnSubmit}
                 validateTrigger={['onSubmit', 'onBlur', 'onChange']}
+                key='deploy'
             >
                 <div className={deploying ? 'deploying order-param-item-row' : ''}>
                     {parameters.map((item) => (
