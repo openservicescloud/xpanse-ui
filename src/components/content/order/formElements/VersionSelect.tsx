@@ -8,10 +8,12 @@ import { RegisterServiceEntity } from '../../../../xpanse-api/generated';
 import { Select } from 'antd';
 
 export default function VersionSelect({
+    defaultVersion,
     serviceName,
     versionMapper,
     onChangeHandler,
 }: {
+    defaultVersion: string;
     serviceName: string;
     versionMapper: Map<string, RegisterServiceEntity[]>;
     onChangeHandler: (value: string) => void;
@@ -30,7 +32,7 @@ export default function VersionSelect({
             versions.push(versionItem);
         });
         setVersionOptions(versions);
-        setSelectVersion(versions[0].value);
+        setSelectVersion(defaultVersion);
     }, [versionMapper]);
 
     const onChangeVersion = (value: string) => {

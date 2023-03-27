@@ -66,6 +66,7 @@ function CreateService(): JSX.Element {
     useEffect(() => {
         const categoryName = location.search.split('?')[1].split('&')[0].split('=')[1];
         const serviceName = location.search.split('?')[1].split('&')[1].split('=')[1];
+        const defaultVersion = location.search.split('?')[1].split('&')[2].split('=')[1];
         if (!categoryName || !serviceName) {
             return;
         }
@@ -77,14 +78,16 @@ function CreateService(): JSX.Element {
                 const result: Map<string, RegisterServiceEntity[]> = groupRegisterServicesByVersion(rsp);
                 setVersionMapper(result);
                 result.forEach((v, k) => {
+                    if (k === defaultVersion) {
+                        setSelectCsp(result.get(defaultVersion)?.at(0)?.csp as string);
+                        setSelectVersion(k);
+                        setSelectArea(
+                            result.get(defaultVersion)?.at(0)?.ocl?.cloudServiceProvider?.regions.at(0)?.area as string
+                        );
+                    }
                     let versionItem = { value: k || '', label: k || '' };
                     versions.push(versionItem);
                 });
-                setSelectCsp(result.get(versions[0].value)?.at(0)?.csp as string);
-                setSelectVersion(versions[0].value);
-                setSelectArea(
-                    result.get(versions[0].value)?.at(0)?.ocl?.cloudServiceProvider?.regions.at(0)?.area as string
-                );
             } else {
                 return;
             }
@@ -99,6 +102,7 @@ function CreateService(): JSX.Element {
             </div>
             <div className={'services-content'}>
                 <VersionSelect
+                    defaultVersion={selectVersion}
                     serviceName={serviceName}
                     versionMapper={versionMapper}
                     onChangeHandler={onChangeVersion}
